@@ -1,0 +1,73 @@
+{
+  "version": 2,
+  "generator": "ChatGPT Image (OpenAI), per user",
+  "method": "Original supplied bytes; no resizing or retouching",
+  "active": [
+    {
+      "state": "sleeping",
+      "path": "assets/active/sleeping.png",
+      "originalName": "dsh-pet-deepsleep.png",
+      "sourceSha256": "bca5680ada0c12d5669ce154b8a909101edea92ab22722d573685fad022fbbd5",
+      "sha256": "bca5680ada0c12d5669ce154b8a909101edea92ab22722d573685fad022fbbd5",
+      "width": 919,
+      "height": 620,
+      "use": "runtime",
+      "processing": "Unmodified user-supplied ChatGPT Image PNG"
+    },
+    {
+      "state": "thinking",
+      "path": "assets/active/thinking.png",
+      "originalName": "dsh-pet-thinking.png",
+      "sourceSha256": "5a1e80e28ca8e61d8bb38103f9d3e7657ed599903f968c257c4f4be6dab29a5e",
+      "sha256": "5a1e80e28ca8e61d8bb38103f9d3e7657ed599903f968c257c4f4be6dab29a5e",
+      "width": 780,
+      "height": 713,
+      "use": "runtime",
+      "processing": "Unmodified user-supplied ChatGPT Image PNG"
+    },
+    {
+      "state": "done",
+      "path": "assets/active/complete.png",
+      "originalName": "dsh-pet-work-done.png",
+      "sourceSha256": "8aa96ceabcf76d755046c012bef2235416514c1a550247eebbd1bf2fd4b803e4",
+      "sha256": "8aa96ceabcf76d755046c012bef2235416514c1a550247eebbd1bf2fd4b803e4",
+      "width": 1254,
+      "height": 1254,
+      "use": "runtime",
+      "processing": "Unmodified user-supplied ChatGPT Image PNG"
+    },
+    {
+      "state": "permission",
+      "path": "assets/active/permission.png",
+      "originalName": "dsh-pet-permission.png",
+      "sourceSha256": "cf45c27dc8ce1317dd4017733473d9cf24b9439a1765e9324d7043404b9431fd",
+      "sha256": "cf45c27dc8ce1317dd4017733473d9cf24b9439a1765e9324d7043404b9431fd",
+      "width": 1448,
+      "height": 1086,
+      "use": "runtime",
+      "processing": "Unmodified user-supplied ChatGPT Image PNG"
+    },
+    {
+      "state": "hungry",
+      "path": "assets/active/hungry.png",
+      "originalName": "dsh-pet-hungry.png",
+      "sourceSha256": "6ccfe5e628e816c4ac2d3a6a40188fe26973c220b71a72e2424f379482bb7c27",
+      "sha256": "6ccfe5e628e816c4ac2d3a6a40188fe26973c220b71a72e2424f379482bb7c27",
+      "width": 1448,
+      "height": 1086,
+      "use": "runtime",
+      "processing": "Unmodified user-supplied ChatGPT Image PNG"
+    },
+    {
+      "state": "tanking",
+      "path": "assets/active/tanking.png",
+      "originalName": "dsh-pet-tanking.png",
+      "sourceSha256": "b8f096d664b8f20da73f15f4c0c493a5c13ea096658806a1ae43a6adbc425dff",
+      "sha256": "b8f096d664b8f20da73f15f4c0c493a5c13ea096658806a1ae43a6adbc425dff",
+      "width": 1448,
+      "height": 1086,
+      "use": "README illustration",
+      "processing": "Unmodified user-supplied ChatGPT Image PNG"
+    }
+  ]
+}

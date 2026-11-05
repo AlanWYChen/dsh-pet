@@ -23,7 +23,12 @@ class PetState {
       this.active.delete(event.sessionId);
       for (const [id, pending] of this.permissions) if (pending.sessionId === event.sessionId) this.permissions.delete(id);
     }
-    this.current = [...this.permissions.values()].at(-1) || (event.state === 'permission-resolved' ? this.idle() : event);
+    // Sleeping describes this session ending, not every session being idle.
+    // Keep another running turn visible after unrelated cleanup/disposal.
+    const restingView = event.state === 'sleeping' && this.active.size > 0
+      ? [...this.active.values()].at(-1) : event;
+    this.current = [...this.permissions.values()].at(-1)
+      || (event.state === 'permission-resolved' ? this.idle() : restingView);
     return event;
   }
   idle() {

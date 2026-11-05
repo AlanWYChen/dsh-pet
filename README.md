@@ -1,12 +1,12 @@
 # dsh-pet · 蓝色大肥鱼
 
-![dsh-pet sleeping on the desktop, with an “OFF DUTY” notification bubble](<docs/desktop-pet.webp>)
+![Tanking whale-girl companion](<assets/active/tanking.png>)
 
 A sleepy blue whale desktop companion for **DeepSeek Harness (DSH)**. It keeps you company while your agent thinks, lets you know when a reply is ready, and nudges you when permission is needed.
 
 Built with Electron, with bilingual English/Chinese settings and messages. The companion belongs to your running DSH Host—not to a browser tab or a separate service.
 
-> Unofficial fan project, not affiliated with DeepSeek or OpenAI. Artwork includes third-party and user-supplied images with differing or unverified permissions. See [artwork credits and restrictions](<CREDITS.md>) before redistributing or using commercially. Public availability is not a blanket license to reuse the artwork.
+> Unofficial fan project, not affiliated with DeepSeek or OpenAI. Current artwork is user-supplied and generated with ChatGPT Image. See [artwork credits](<CREDITS.md>) for provenance and character-design attribution; no blanket license to underlying characters or trademarks is granted.
 
 ## What it does
 
@@ -64,7 +64,16 @@ Debug mode defaults off and is remembered for the current Host lifetime. Native 
 
 Pending permissions take display priority and are tracked independently. The short debounce suppresses most immediately resolved requests. Generic user questions are not treated as permission requests. Delegated subagents are ignored; parent escalation prompts can still notify.
 
-Completion, error, and hungry alerts rest after 16 seconds. Permission alerts remain until resolved. Old history is not replayed, and starting the pet mid-turn does not reconstruct already-pending activity.
+Completion, error, and hungry alerts rest after 16 seconds. Permission alerts remain until resolved. **Thinking has no inactivity timeout:** another session becoming idle, stopping or being disposed cannot put a still-working session to sleep. Sleep is used when no tracked turn or permission remains. Old history is not replayed, and starting the pet mid-turn does not reconstruct already-pending activity.
+
+Bubbles now show one short line in a compact 210px-wide frame by default; secondary details appear on hover or keyboard focus. Sleeping/thinking bubbles remain hover/focus-only, while alert bubbles remain visible as described above.
+
+## Artwork folders
+
+- [Active artwork](<assets/active/>): six user-supplied ChatGPT Image-generated PNGs, retained byte-for-byte at their native dimensions and transparency. Five serve the existing runtime moods; hungry is also used for errors. Tanking illustrates this README without adding a runtime state.
+- [Manifest](<assets/manifest.json>): supplied filenames, source/output hashes, dimensions and uses.
+
+Stale archive, reference and reserve images have been removed. See [credits](<CREDITS.md>) for provenance and character-design attribution.
 
 ## Privacy and process ownership
 
@@ -84,7 +93,7 @@ node --check client.js
 
 The existing test suite covers event mapping, privacy boundaries, permissions, helper lifecycle, settings transport/localization, native-drag contracts, renderer startup, and delivery acknowledgements.
 
-**Current verification:** 53 of 55 automated tests pass. Two renderer tests still assert legacy `active/thinking.png` / `active/complete.png` artwork paths, while the renderer uses the current reference-image filenames. These failures are retained transparently; neither tests nor implementation were changed for publication. Both JavaScript entry-point syntax checks pass. No GitHub Actions workflows are configured.
+Automated checks cover exact supplied artwork bytes, manifest provenance, clean asset inventory, active renderer paths, compact bubbles and thinking persistence. The replacement artwork still needs a fresh user-visible Electron check. No GitHub Actions workflows are configured.
 
 For standalone UI experiments only:
 
@@ -114,4 +123,4 @@ These are developer compatibility utilities, not the normal DSH installation pat
 - No persistent startup preference or saved window position.
 - No session-specific notification deep links or click-through transparent margins.
 - OS-native notification delivery and full cross-platform appearance still need broader verification.
-- Personal/non-commercial prototype with unresolved permissions for some included artwork. No blanket project-wide reuse license is granted here.
+- Fan prototype using user-supplied ChatGPT Image artwork. No blanket project-wide reuse license is granted here.
