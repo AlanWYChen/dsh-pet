@@ -1,0 +1,19 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self'; style-src 'self'; img-src 'self'; connect-src 'none'">
+<title>蓝色大肥鱼 · DeepSeek Pet</title>
+<link rel="stylesheet" href="pet.css">
+</head>
+<body>
+<main id="pet" data-state="sleeping" aria-label="DeepSeek desktop pet">
+  <div id="notification" class="notification" hidden>
+    <button id="bubble" class="bubble" aria-label="Open chat in DSH"><span id="eyebrow">OFF DUTY</span><span id="message" role="status" aria-live="polite">先睡一小会儿…</span><span id="detail">I'll wake up when your reply is ready.</span></button>
+    <button id="ack" aria-label="Dismiss notification" title="Dismiss notification">×</button>
+  </div>
+  <div class="ocean" tabindex="0" aria-label="Pet · hover or focus for details, right-click for menu"><span class="zzz" aria-hidden="true">z z Z</span><img id="character" src="../assets/sleeping.webp" alt="Sleeping blue whale girl" draggable="false"><div class="shadow"></div><button id="menu" aria-label="Pet menu" title="Pet menu">···</button></div>
+</main>
+<script src="pet.js"></script>
+</body>
+</html>

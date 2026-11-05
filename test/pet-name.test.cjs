@@ -1,0 +1,44 @@
+const { test } = require('node:test');
+const assert = require('node:assert/strict');
+const fs = require('node:fs');
+const path = require('node:path');
+const vm = require('node:vm');
+
+for (const [language, expected] of [['en', 'Pet'], ['zh', '大肥鱼']]) {
+  test(`pet tab and settings heading use exact ${language} name ${expected}`, () => {
+    let definition, registration;
+    const dictionaries = new Map();
+    const elements = [];
+    const React = {
+      createElement(type, props, ...children) {
+        const value = { type, props, children }; elements.push(value); return value;
+      },
+      useSyncExternalStore() {},
+      useState: value => [value, () => {}],
+      useRef: value => ({ current: value }),
+      useEffect() {},
+    };
+    vm.runInNewContext(fs.readFileSync(path.resolve(__dirname, '../client.js'), 'utf8'), {
+      window: { __ModuleLoader__: { load(value) { definition = value; } } },
+    }, { filename: 'client.js' });
+    const client = definition.factory(name => { assert.equal(name, 'react'); return React; });
+    client.apply({
+      effect(callback) { return callback(); },
+      locale: {
+        register(namespace, locale, dictionary) { dictionaries.set(`${namespace}:${locale}`, dictionary); return () => {}; },
+        bind(namespace) { return key => dictionaries.get(`${namespace}:${language}`)?.[key] ?? key; },
+      },
+      slots: {
+        inject(_slot, callback) { return callback(); },
+        register(options, component) { registration = { options, component }; return () => {}; },
+      },
+    });
+    assert.equal(dictionaries.get(`desktop-pet:${language}`).title, expected, 'localized title is the exact user-requested name');
+    const label = registration.options.label;
+    assert.equal(typeof label === 'function' ? label() : label, expected, 'Settings tab displays exact requested name');
+    // Inspect component output values only, with effects inert; no DOM/browser,
+    // fetch, native helper or style/layout emulation is involved.
+    registration.component();
+    assert.ok(elements.some(element => element.type === 'div' && element.children.length === 1 && element.children[0] === expected), 'settings heading displays the same exact name');
+  });
+}
