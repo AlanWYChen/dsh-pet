@@ -102,6 +102,9 @@ export function apply(ctx) {
       return { ...pet.status(), ...pet.debugStatus() };
     }
     if (action === 'balance') {
+      // Refresh before answering so a sign-in is visible immediately instead of
+      // waiting for the five-minute poll.
+      try { await balanceController.check?.(); } catch { /* state still answers */ }
       return { balance: balanceController.state(), threshold: balanceThreshold() };
     }
     if (action === 'set-threshold') {

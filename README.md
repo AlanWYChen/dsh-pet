@@ -48,7 +48,7 @@ Bundle installation is profile-wide, but each running Host owns its own helper a
 | Hover or focus the character | Reveal the idle bubble |
 | Right-click or open the hover menu | Mute notifications (chime and OS alerts) or open DSH |
 | Click an alert bubble or native notification | Open the owning Host's GUI |
-| Settings → Desktop Pet → Balance / threshold | See the live balance and change the low-balance warning amount (CNY) |
+| Settings → Desktop Pet → Balance / threshold | See the live balance (requires a signed-in DeepSeek account) and change the low-balance warning amount (CNY) |
 | Settings → Desktop Pet → Sound | Turn the alert chime on or off |
 | Settings → Desktop Pet → Test notification | Fire one completion alert to check the whole alert path |
 | Settings → Desktop Pet → Debug mode | Enable manual mood previews in the pet menu |
@@ -152,5 +152,6 @@ These are developer compatibility utilities, not the normal DSH installation pat
 - No session-specific notification deep links or click-through transparent margins.
 - The OS-native notification is best-effort. On macOS, a development build of Electron may not register as a notification sender, so the system banner can be missing; the in-window alert and chime remain the reliable channels.
 - The pet's right-click / ··· menu is the OS-native menu, not an in-window DSH-styled menu.
+- Balance comes from DSH's DeepSeek account session. If that session expires, sign in again under **Settings → Account**; the Desktop Pet tab shows “Sign in to DeepSeek” when it can tell the account is signed out.
 - macOS is verified, while Windows and Linux are intended and OS-specific calls are guarded; full cross-platform appearance and behavior still need broader verification.
 - Fan prototype using user-supplied ChatGPT Image artwork. No blanket project-wide reuse license is granted here.

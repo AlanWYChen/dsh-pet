@@ -14,7 +14,7 @@ function defaultClient() {
   };
 }
 
-function unavailableState() {
+function unavailableState(reason = 'pending') {
   return {
     status: 'unavailable',
     low: false,
@@ -24,6 +24,8 @@ function unavailableState() {
     currency: null,
     lastAlertAt: null,
     wasLow: false,
+    reason,
+    checkedAt: null,
   };
 }
 
@@ -63,23 +65,30 @@ export function createBalanceWatcher({
 
   async function check() {
     let balance = null;
+    let reason = 'ok';
     try {
-      if (account && typeof account.getBalance === 'function') {
+      if (!account || typeof account.getBalance !== 'function') {
+        reason = 'no-service';
+      } else {
         balance = await account.getBalance(client || defaultClient());
+        if (balance === null || balance === undefined) reason = 'signed-out';
+        else if (balance.status === 'failed') reason = 'query-failed';
       }
     } catch {
       balance = null;
+      reason = 'error';
     }
     try {
-      state = evaluateBalance({
+      const evaluated = evaluateBalance({
         balance,
         threshold: settings.balanceThreshold,
         now: clock(),
         lastAlertAt: state.lastAlertAt,
         wasLow: state.wasLow,
       });
+      state = { ...evaluated, reason: evaluated.status === 'ready' ? 'ok' : reason, checkedAt: clock() };
     } catch {
-      state = unavailableState();
+      state = { ...unavailableState('error'), checkedAt: clock() };
     }
     try { onState?.(state); } catch { /* an observer must not break polling */ }
     if (state.shouldAlert) {

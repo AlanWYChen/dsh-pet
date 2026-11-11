@@ -15,6 +15,8 @@ function unavailableState() {
     currency: null,
     lastAlertAt: null,
     wasLow: false,
+    reason: 'no-inject',
+    checkedAt: null,
   };
 }
 
@@ -38,37 +40,52 @@ export function startBalance({ ctx, pet, config, now } = {}) {
   const inert = unavailableState();
   let watcher = null;
 
-  try {
-    if (ctx && typeof ctx.inject === 'function') {
-      ctx.inject(['deepseekAccount'], child => {
-        const account = accountOf(child);
-        // A re-injected account service replaces the previous watcher.
-        if (watcher) {
-          try { watcher.stop(); } catch { /* ignore */ }
-        }
-        watcher = createBalanceWatcher({
-          account,
-          config: settings,
-          now,
-          onAlert: result => {
-            try {
-              pet?.send?.({
-                state: 'low-balance',
-                eventId: `balance:${result.lastAlertAt ?? Date.now()}`,
-                title: formatBalance(result.amount, result.currency),
-              });
-            } catch { /* a stopped helper still records the state */ }
-          },
-        });
-        try {
-          // cordis runs the callback now and treats its return value as the
-          // fiber disposer.
-          child?.effect?.(() => () => watcher?.stop());
-        } catch { /* no effect scope: the watcher is still usable */ }
-        watcher.start();
-      });
+  function mount(account) {
+    if (watcher) {
+      try { watcher.stop(); } catch { /* replacing a watcher is best effort */ }
     }
-  } catch { /* injection unavailable: remain inert */ }
+    watcher = createBalanceWatcher({
+      account,
+      config: settings,
+      now,
+      onAlert: result => {
+        try {
+          pet?.send?.({
+            state: 'low-balance',
+            eventId: `balance:${result.lastAlertAt ?? Date.now()}`,
+            title: formatBalance(result.amount, result.currency),
+          });
+        } catch { /* a stopped helper still records the state */ }
+      },
+    });
+    try { watcher.start(); } catch { /* polling is optional */ }
+    return watcher;
+  }
+
+  // The account plugin is normally already mounted by the time this bundle
+  // applies. Prefer the direct service lookup; fall back to injection when the
+  // service is still arriving (or exposed only through a child context).
+  let direct = null;
+  try {
+    direct = ctx?.get?.('deepseekAccount') ?? ctx?.deepseekAccount ?? null;
+  } catch { direct = null; }
+  if (direct) {
+    mount(direct);
+    try { ctx.effect?.(() => () => { try { watcher?.stop(); } catch { /* ignore */ } }); } catch { /* no effect scope */ }
+  } else {
+    try {
+      if (ctx && typeof ctx.inject === 'function') {
+        ctx.inject(['deepseekAccount'], child => {
+          mount(accountOf(child));
+          try {
+            // cordis runs the callback now and treats its return value as the
+            // fiber disposer.
+            child?.effect?.(() => () => watcher?.stop());
+          } catch { /* no effect scope: the watcher is still usable */ }
+        });
+      }
+    } catch { /* injection unavailable: remain inert */ }
+  }
 
   function state() {
     return watcher ? watcher.state() : { ...inert };

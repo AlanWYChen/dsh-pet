@@ -72,8 +72,20 @@
       "sha256": "14f9dea0913c5d56db8f8ce246ab6be7e13dc360fbb0820c0155be7f22a543ef"
     },
     {
+      "file": "test/v2-balance-direct.test.cjs",
+      "sha256": "d39ec051e348b4b36c13be8180c953fb76b673c0cb7d183b1f911bd307a9758f"
+    },
+    {
       "file": "test/v2-balance-host.test.cjs",
       "sha256": "bff24df77cc14109363f140b70a16f9858d806e1fc96a80467266ee88fb5ccf5"
+    },
+    {
+      "file": "test/v2-balance-reason.test.cjs",
+      "sha256": "6f9e657a25ab518c5709be34352acc12e043a57fe6fd631e1465b157e53feb91"
+    },
+    {
+      "file": "test/v2-balance-refresh.test.cjs",
+      "sha256": "b8354358777ce1f3d20f669f98fec487fa22541105bd54341d59b3a0236cd41d"
     },
     {
       "file": "test/v2-balance-watcher.test.cjs",
@@ -138,7 +150,7 @@
       "sha256": "008fbc9bd551fcc984c6464a4c59594cc0ed8c5665e186e811a254d7835ab49d"
     }
   ],
-  "revision": 8,
-  "revisedAt": "2026-11-11T01:27:06.530Z",
-  "revisionNote": "User-approved frozen-test correction (test/v2-balance.test.cjs): bonus fixture 4.50->3.50 and amount 5.5->4.5 so the bonus-inclusive low case is logically consistent (< 5 CNY). No production behavior changed for this correction. | Added test/v2-tool-schema.test.cjs (agent tool value payload); RED recorded during development (not retained in the tree). | Added test/plugin-meta.test.cjs for the dsh-desktop-pet registration name and supplied tail icon. | User-approved Settings-tab rename to Desktop Pet / 桌面宠物 with the tail nav icon, and npm package id rename to dsh-desktop-pet. | User-approved white tail icon and native DSH settings control styling. | Tool output schema no longer requires helper status on balance actions (regression test added). | Housekeeping: docs reorganized; package files list now ships scripts; package.json hash refreshed (test script unchanged)."
+  "revision": 9,
+  "revisedAt": "2026-11-11T01:37:59.377Z",
+  "revisionNote": "User-approved frozen-test correction (test/v2-balance.test.cjs): bonus fixture 4.50->3.50 and amount 5.5->4.5 so the bonus-inclusive low case is logically consistent (< 5 CNY). No production behavior changed for this correction. | Added test/v2-tool-schema.test.cjs (agent tool value payload); RED recorded during development (not retained in the tree). | Added test/plugin-meta.test.cjs for the dsh-desktop-pet registration name and supplied tail icon. | User-approved Settings-tab rename to Desktop Pet / 桌面宠物 with the tail nav icon, and npm package id rename to dsh-desktop-pet. | User-approved white tail icon and native DSH settings control styling. | Tool output schema no longer requires helper status on balance actions (regression test added). | Housekeeping: docs reorganized; package files list now ships scripts; package.json hash refreshed (test script unchanged). | Balance: direct account-service lookup, on-demand refresh from Settings, and explicit unavailable reasons."
 }
