@@ -44,10 +44,11 @@ for (const [language, expected] of [['en', 'Desktop Pet'], ['zh', '桌面宠物'
     assert.ok(icon, 'the Settings tab contributes a navigation icon');
     assert.equal(icon.options.id, section.options.id, 'the icon id must match the section id');
     const rendered = icon.component({ size: 20, active: true });
-    assert.equal(rendered.type, 'img');
-    assert.ok(rendered.props.src.startsWith('data:image/png;base64,'), 'the supplied tail icon is embedded for the client');
-    assert.equal(rendered.props.width, 20);
-    assert.equal(rendered.props.height, 20);
+    assert.equal(rendered.type, 'span');
     assert.equal(rendered.props['aria-hidden'], 'true');
+    assert.equal(rendered.props.style.width, 20);
+    assert.equal(rendered.props.style.height, 20);
+    assert.equal(rendered.props.style.backgroundColor, 'currentColor', 'the glyph follows the native icon color (white on the dark theme)');
+    assert.ok(String(rendered.props.style.WebkitMaskImage).startsWith('url(data:image/png;base64,'), 'the supplied tail icon is embedded as an adaptive mask');
   });
 }
