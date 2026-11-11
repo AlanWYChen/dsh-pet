@@ -1,4 +1,4 @@
-const STATES = new Set(['thinking', 'done', 'hungry', 'sleeping', 'error', 'permission', 'permission-resolved']);
+const STATES = new Set(['thinking', 'done', 'hungry', 'sleeping', 'error', 'permission', 'permission-resolved', 'low-balance']);
 function normalizeEvent(input) {
   if (!input || typeof input !== 'object' || !STATES.has(input.state)) throw new Error('Invalid pet state');
   const text = (value, max) => typeof value === 'string' ? value.slice(0, max) : '';
@@ -19,6 +19,10 @@ class PetState {
       this.permissions.delete(key);
     } else if (event.state === 'thinking') {
       this.active.set(event.sessionId, event);
+    } else if (event.state === 'low-balance') {
+      // A balance warning is account-wide: it must surface as an alert without
+      // ending a running turn or dropping a pending permission. The permission
+      // view keeps priority below; a newer event replaces the alert normally.
     } else {
       this.active.delete(event.sessionId);
       for (const [id, pending] of this.permissions) if (pending.sessionId === event.sessionId) this.permissions.delete(id);

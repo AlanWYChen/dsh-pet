@@ -1,0 +1,105 @@
+{
+  "increment": 1,
+  "created": "2026-11-11T00:29:52.792Z",
+  "command": "npm test",
+  "protectedTests": [
+    {
+      "file": "test/active-artwork.test.cjs",
+      "sha256": "0af5da8427d83af606699168bbb06c7d94ff4332c911b95033f887f42ebe7a88"
+    },
+    {
+      "file": "test/active-thinking.test.cjs",
+      "sha256": "ab6b4ced5a0fb2c02fe889e08bcb215928b859e8fbfa88128b418ebe907e9ed8"
+    },
+    {
+      "file": "test/client-tab.test.cjs",
+      "sha256": "c123a0b391166491cfe9a297f79596d1c067e97e3498a2f7a722448fd5dcfbbb"
+    },
+    {
+      "file": "test/compact-bubble.test.cjs",
+      "sha256": "742077130b10a2bf1a8dd72519ecd51417fac7fbd68415fed23d4e048696b5d5"
+    },
+    {
+      "file": "test/debug-mode.test.cjs",
+      "sha256": "a3e9f74856e6129dc42a9183dd088e7322b7b6bb0cf9e0b70ffdd40b3c1afb17"
+    },
+    {
+      "file": "test/debug-validation.test.cjs",
+      "sha256": "fd6c112a5729ecd12f02a28e04f1079851e1852f772856e008edb81b74d01ad6"
+    },
+    {
+      "file": "test/event-audit.test.cjs",
+      "sha256": "02c3920caf244e51786aeacf52078280f4708ce787718bef9c6c93f7c270d731"
+    },
+    {
+      "file": "test/event-diagnostics.test.cjs",
+      "sha256": "9b95c816aee923958846bc8a2ee2f06eddc11450ee70bcf1ccd61bafa45aefe0"
+    },
+    {
+      "file": "test/managed-helper.test.cjs",
+      "sha256": "13528fa0c34805ad454bf6ed86aec95c76f38a1a1ef9096e8f1dd8c6a8297f63"
+    },
+    {
+      "file": "test/pet-name.test.cjs",
+      "sha256": "79a6dc02ca2dd07324c161f7520d7d6ea367df8a002a62b1cef7648bca1949e3"
+    },
+    {
+      "file": "test/pet.test.cjs",
+      "sha256": "e00aa775151e75d4d78fd9ba51afbe4fb6fb7cbb1344fd1f17c19ae7acd06d67"
+    },
+    {
+      "file": "test/pointer-drag.test.cjs",
+      "sha256": "6b25212f126e8e996adadf622ac2dc5dca62a2ca0d606c5df1c53466ab96bfdc"
+    },
+    {
+      "file": "test/renderer-global.test.cjs",
+      "sha256": "b9716691c8bf63b61734e80eb93f4ba5b917c3f14f6d436c232b232ca5bdba1b"
+    },
+    {
+      "file": "test/setting-transport.test.cjs",
+      "sha256": "41caea74487e664e827f99a1eb54777c761304bc3350fe8c43c562079ccbbfb8"
+    },
+    {
+      "file": "test/settings-actions.test.cjs",
+      "sha256": "c2bc4adb5fe3f1a523a024de430f6281e9a4af08b190aa0e94c99a693a6968b2"
+    },
+    {
+      "file": "test/v2-config.test.cjs",
+      "sha256": "8fd46466537661169ae448847ed1d35438b3846395e7e6d2430d3755e71a462a"
+    },
+    {
+      "file": "test/v2-main-alerts.test.cjs",
+      "sha256": "96446d004d0f6b1223111b6b3098976bd7145308d9ec7422464dc8246b79db32"
+    },
+    {
+      "file": "test/v2-managed-persist.test.cjs",
+      "sha256": "581c93d09403c44d998fcf51dbeb344f65aeeb1679d627b7af03bfd9ca976a60"
+    },
+    {
+      "file": "test/v2-renderer-alerts.test.cjs",
+      "sha256": "0cd6a7d71a61f49718744517f35104b5e96147905c766b98863f62d447779267"
+    },
+    {
+      "file": "test/v2-resume.test.cjs",
+      "sha256": "b01ab79d94ff0fd1fad9200e63d0f1a2a6406778bbac250fe05741d75b21c88c"
+    },
+    {
+      "file": "test/window-position.test.cjs",
+      "sha256": "d11cc2b382dfc2fad29c59b29fb6d70b594ae74d39e3c55b1a853f034edff4e9"
+    }
+  ],
+  "packageJson": {
+    "sha256": "0a9304e8e4465a4fdef6f1ad3bf6431a5684c86bdbb2103cf09f7e5a952738c6",
+    "testScript": "node --test test/*.test.cjs"
+  },
+  "scaffolds": [
+    {
+      "file": "src/config.cjs",
+      "sha256": "07202643a616cc88dde6b52541a44abc59e26aea382dc225a70a1406d3ebf36f"
+    },
+    {
+      "file": "src/resume.mjs",
+      "sha256": "e8f3233278106452c3bc6b83ae0f8e10c7901fe0f00f769264d3df81972be9f2"
+    }
+  ]
+}

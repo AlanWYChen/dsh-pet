@@ -10,6 +10,8 @@ main{position:relative;width:100%;height:100%;user-select:none}
 #detail{font-size:10px;line-height:1.4;color:#687b98;margin-top:4px;display:none;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;overflow-wrap:anywhere}
 main:hover #detail,main:focus-within #detail{display:block;max-height:28px}
 main:hover .bubble,main:focus-within .bubble{max-height:88px}
+main[data-alert="true"] #detail{display:block;max-height:28px}
+main[data-alert="true"] .bubble{max-height:88px}
 #ack{position:absolute;top:5px;right:5px;border:0;background:transparent;border-radius:50%;width:24px;height:24px;font-size:18px;line-height:20px;color:#8190a8}
 .ocean{position:absolute;bottom:8px;left:50%;transform:translateX(-50%);width:156px;height:146px;display:flex;align-items:center;justify-content:center;-webkit-app-region:drag;border-radius:24px;outline:none}
 #character{width:140px;height:140px;object-fit:contain;position:relative;z-index:1;filter:drop-shadow(0 4px 4px #1c3b6a15);animation:breathe 5s ease-in-out infinite;pointer-events:none}

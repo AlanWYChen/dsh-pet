@@ -1,0 +1,298 @@
+✖ missing config loads the documented defaults without creating a file (1.210583ms)
+✖ save then load round-trips every field and keeps the file private and atomic (0.300125ms)
+✖ a corrupt or unreadable config falls back to defaults instead of throwing (0.355833ms)
+✖ invalid fields fall back individually and unknown keys are dropped (0.332958ms)
+✖ a failed save never destroys the previous file (0.177166ms)
+✖ re-saving an existing world-readable file tightens it to 0600 (0.496208ms)
+✖ a completion alert raises the pet without focus, notifies, and stays until acknowledged (10.247833ms)
+✔ thinking is not an alert and does not raise the window (1.819625ms)
+✖ a low-balance alert uses the same persistent alert machinery (1.841333ms)
+✖ a saved on-screen position is restored and an off-screen one falls back (2.271209ms)
+✖ a finished drag reports its position to the host (3.24775ms)
+✔ the oldest minimal Electron fake still boots and survives an alert (1.448458ms)
+✖ without a configFile the helper keeps in-memory behavior and never auto-starts (2.337125ms)
+✖ a saved enabled state auto-starts exactly once on host boot (0.741375ms)
+✖ a saved stopped state does nothing on boot (0.535667ms)
+✖ enable and disable persist immediately (2.065459ms)
+✖ a failed auto-start records the error, persists enabled, and does not retry in a loop (0.586958ms)
+✖ a reported drag position is persisted (0.424459ms)
+✖ a saved position is passed to the helper for restoration (0.84975ms)
+✖ a corrupt config is treated as stopped rather than crashing (0.582667ms)
+✖ an alert reveals its detail without hover and one chime plays per alert (2.602792ms)
+✔ dismissing an alert hides it and clears the alert treatment (0.522542ms)
+✔ alerts never throw when the renderer has no AudioContext (2.139584ms)
+✖ root turn starts are tracked and ends are forgotten (1.058458ms)
+✖ the most recently started root turn wins (0.156458ms)
+✖ subagent work never produces a resume state (0.132208ms)
+✖ an empty tracker has no resume state (0.253ms)
+ℹ tests 27
+ℹ suites 0
+ℹ pass 4
+ℹ fail 23
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 89.345041
+
+✖ failing tests:
+
+test at test/v2-config.test.cjs:21:1
+✖ missing config loads the documented defaults without creating a file (1.210583ms)
+  Error: config not implemented
+      at loadConfig (/Users/alanchen/Local Documents/Dev/dsh-pet/src/config.cjs:12:9)
+      at TestContext.<anonymous> (/Users/alanchen/Local Documents/Dev/dsh-pet/test/v2-config.test.cjs:23:20)
+      at Test.runInAsyncScope (node:async_hooks:226:14)
+      at Test.run (node:internal/test_runner/test:1402:25)
+      at Test.start (node:internal/test_runner/test:1262:17)
+      at startSubtestAfterBootstrap (node:internal/test_runner/harness:387:17)
+
+test at test/v2-config.test.cjs:28:1
+✖ save then load round-trips every field and keeps the file private and atomic (0.300125ms)
+  Error: config not implemented
+      at saveConfig (/Users/alanchen/Local Documents/Dev/dsh-pet/src/config.cjs:16:9)
+      at TestContext.<anonymous> (/Users/alanchen/Local Documents/Dev/dsh-pet/test/v2-config.test.cjs:30:17)
+      at Test.runInAsyncScope (node:async_hooks:226:14)
+      at Test.run (node:internal/test_runner/test:1402:25)
+      at Test.processPendingSubtests (node:internal/test_runner/test:974:18)
+      at Test.postRun (node:internal/test_runner/test:1542:19)
+      at Test.run (node:internal/test_runner/test:1467:12)
+      at async startSubtestAfterBootstrap (node:internal/test_runner/harness:387:3)
+
+test at test/v2-config.test.cjs:49:1
+✖ a corrupt or unreadable config falls back to defaults instead of throwing (0.355833ms)
+  Error: config not implemented
+      at loadConfig (/Users/alanchen/Local Documents/Dev/dsh-pet/src/config.cjs:12:9)
+      at TestContext.<anonymous> (/Users/alanchen/Local Documents/Dev/dsh-pet/test/v2-config.test.cjs:52:20)
+      at Test.runInAsyncScope (node:async_hooks:226:14)
+      at Test.run (node:internal/test_runner/test:1402:25)
+      at Test.processPendingSubtests (node:internal/test_runner/test:974:18)
+      at Test.postRun (node:internal/test_runner/test:1542:19)
+      at Test.run (node:internal/test_runner/test:1467:12)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:974:7)
+
+test at test/v2-config.test.cjs:61:1
+✖ invalid fields fall back individually and unknown keys are dropped (0.332958ms)
+  Error: config not implemented
+      at loadConfig (/Users/alanchen/Local Documents/Dev/dsh-pet/src/config.cjs:12:9)
+      at TestContext.<anonymous> (/Users/alanchen/Local Documents/Dev/dsh-pet/test/v2-config.test.cjs:71:20)
+      at Test.runInAsyncScope (node:async_hooks:226:14)
+      at Test.run (node:internal/test_runner/test:1402:25)
+      at Test.processPendingSubtests (node:internal/test_runner/test:974:18)
+      at Test.postRun (node:internal/test_runner/test:1542:19)
+      at Test.run (node:internal/test_runner/test:1467:12)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:974:7)
+
+test at test/v2-config.test.cjs:89:1
+✖ a failed save never destroys the previous file (0.177166ms)
+  Error: config not implemented
+      at saveConfig (/Users/alanchen/Local Documents/Dev/dsh-pet/src/config.cjs:16:9)
+      at TestContext.<anonymous> (/Users/alanchen/Local Documents/Dev/dsh-pet/test/v2-config.test.cjs:91:3)
+      at Test.runInAsyncScope (node:async_hooks:226:14)
+      at Test.run (node:internal/test_runner/test:1402:25)
+      at Test.processPendingSubtests (node:internal/test_runner/test:974:18)
+      at Test.postRun (node:internal/test_runner/test:1542:19)
+      at Test.run (node:internal/test_runner/test:1467:12)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:974:7)
+
+test at test/v2-config.test.cjs:103:1
+✖ re-saving an existing world-readable file tightens it to 0600 (0.496208ms)
+  Error: config not implemented
+      at saveConfig (/Users/alanchen/Local Documents/Dev/dsh-pet/src/config.cjs:16:9)
+      at TestContext.<anonymous> (/Users/alanchen/Local Documents/Dev/dsh-pet/test/v2-config.test.cjs:107:3)
+      at Test.runInAsyncScope (node:async_hooks:226:14)
+      at Test.run (node:internal/test_runner/test:1402:25)
+      at Test.processPendingSubtests (node:internal/test_runner/test:974:18)
+      at Test.postRun (node:internal/test_runner/test:1542:19)
+      at Test.run (node:internal/test_runner/test:1467:12)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:974:7)
+
+test at test/v2-main-alerts.test.cjs:106:1
+✖ a completion alert raises the pet without focus, notifies, and stays until acknowledged (10.247833ms)
+  AssertionError [ERR_ASSERTION]: alerts carry the effective sound setting
+  + actual - expected
+  
+  + undefined
+  - true
+  
+      at TestContext.<anonymous> (/Users/alanchen/Local Documents/Dev/dsh-pet/test/v2-main-alerts.test.cjs:111:10)
+      at async Test.run (node:internal/test_runner/test:1409:7)
+      at async startSubtestAfterBootstrap (node:internal/test_runner/harness:387:3) {
+    generatedMessage: false,
+    code: 'ERR_ASSERTION',
+    actual: undefined,
+    expected: true,
+    operator: 'strictEqual',
+    diff: 'simple'
+  }
+
+test at test/v2-main-alerts.test.cjs:133:1
+✖ a low-balance alert uses the same persistent alert machinery (1.841333ms)
+  Error: Invalid pet state
+      at normalizeEvent (/Users/alanchen/Local Documents/Dev/dsh-pet/src/state.cjs:3:78)
+      at PetState.accept (/Users/alanchen/Local Documents/Dev/dsh-pet/src/state.cjs:11:19)
+      at receive (/Users/alanchen/Local Documents/Dev/dsh-pet/src/main.cjs:35:23)
+      at EventEmitter.<anonymous> (/Users/alanchen/Local Documents/Dev/dsh-pet/src/main.cjs:22:45)
+      at EventEmitter.emit (node:events:514:20)
+      at TestContext.<anonymous> (/Users/alanchen/Local Documents/Dev/dsh-pet/test/v2-main-alerts.test.cjs:135:15)
+      at async Test.run (node:internal/test_runner/test:1409:7)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:974:7)
+
+test at test/v2-main-alerts.test.cjs:143:1
+✖ a saved on-screen position is restored and an off-screen one falls back (2.271209ms)
+  AssertionError [ERR_ASSERTION]: Expected values to be strictly deep-equal:
+  + actual - expected
+  
+    {
+      height: 270,
+      width: 260,
+  +   x: 1156,
+  +   y: 610
+  -   x: 100,
+  -   y: 200
+    }
+  
+      at TestContext.<anonymous> (/Users/alanchen/Local Documents/Dev/dsh-pet/test/v2-main-alerts.test.cjs:145:10)
+      at async Test.run (node:internal/test_runner/test:1409:7)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:974:7) {
+    generatedMessage: true,
+    code: 'ERR_ASSERTION',
+    actual: { x: 1156, y: 610, width: 260, height: 270 },
+    expected: { x: 100, y: 200, width: 260, height: 270 },
+    operator: 'deepStrictEqual',
+    diff: 'simple'
+  }
+
+test at test/v2-main-alerts.test.cjs:154:1
+✖ a finished drag reports its position to the host (3.24775ms)
+  AssertionError [ERR_ASSERTION]: The expression evaluated to a falsy value:
+  
+    assert.ok(processMock.sent.some(message => message.type === 'pet:position' && message.x === 7 && message.y === 8))
+  
+      at TestContext.<anonymous> (/Users/alanchen/Local Documents/Dev/dsh-pet/test/v2-main-alerts.test.cjs:159:10)
+      at async Test.run (node:internal/test_runner/test:1409:7)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:974:7) {
+    generatedMessage: true,
+    code: 'ERR_ASSERTION',
+    actual: false,
+    expected: true,
+    operator: '==',
+    diff: 'simple'
+  }
+
+test at test/v2-managed-persist.test.cjs:59:1
+✖ without a configFile the helper keeps in-memory behavior and never auto-starts (2.337125ms)
+  TypeError [Error]: pet.autoStart is not a function
+      at TestContext.<anonymous> (/Users/alanchen/Local Documents/Dev/dsh-pet/test/v2-managed-persist.test.cjs:62:30)
+      at async Test.run (node:internal/test_runner/test:1409:7)
+      at async startSubtestAfterBootstrap (node:internal/test_runner/harness:387:3)
+
+test at test/v2-managed-persist.test.cjs:69:1
+✖ a saved enabled state auto-starts exactly once on host boot (0.741375ms)
+  TypeError [Error]: pet.autoStart is not a function
+      at TestContext.<anonymous> (/Users/alanchen/Local Documents/Dev/dsh-pet/test/v2-managed-persist.test.cjs:72:30)
+      at async Test.run (node:internal/test_runner/test:1409:7)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:974:7)
+
+test at test/v2-managed-persist.test.cjs:80:1
+✖ a saved stopped state does nothing on boot (0.535667ms)
+  TypeError [Error]: pet.autoStart is not a function
+      at TestContext.<anonymous> (/Users/alanchen/Local Documents/Dev/dsh-pet/test/v2-managed-persist.test.cjs:83:30)
+      at async Test.run (node:internal/test_runner/test:1409:7)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:974:7)
+
+test at test/v2-managed-persist.test.cjs:88:1
+✖ enable and disable persist immediately (2.065459ms)
+  AssertionError [ERR_ASSERTION]: Expected values to be strictly equal:
+  
+  false !== true
+  
+      at TestContext.<anonymous> (/Users/alanchen/Local Documents/Dev/dsh-pet/test/v2-managed-persist.test.cjs:92:10)
+      at async Test.run (node:internal/test_runner/test:1409:7)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:974:7) {
+    generatedMessage: true,
+    code: 'ERR_ASSERTION',
+    actual: false,
+    expected: true,
+    operator: 'strictEqual',
+    diff: 'simple'
+  }
+
+test at test/v2-managed-persist.test.cjs:98:1
+✖ a failed auto-start records the error, persists enabled, and does not retry in a loop (0.586958ms)
+  TypeError [Error]: pet.autoStart is not a function
+      at TestContext.<anonymous> (/Users/alanchen/Local Documents/Dev/dsh-pet/test/v2-managed-persist.test.cjs:105:28)
+      at async Test.run (node:internal/test_runner/test:1409:7)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:974:7)
+
+test at test/v2-managed-persist.test.cjs:113:1
+✖ a reported drag position is persisted (0.424459ms)
+  TypeError [Error]: pet.autoStart is not a function
+      at TestContext.<anonymous> (/Users/alanchen/Local Documents/Dev/dsh-pet/test/v2-managed-persist.test.cjs:116:13)
+      at async Test.run (node:internal/test_runner/test:1409:7)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:974:7)
+
+test at test/v2-managed-persist.test.cjs:123:1
+✖ a saved position is passed to the helper for restoration (0.84975ms)
+  SyntaxError [Error]: "undefined" is not valid JSON
+      at JSON.parse (<anonymous>)
+      at TestContext.<anonymous> (/Users/alanchen/Local Documents/Dev/dsh-pet/test/v2-managed-persist.test.cjs:127:25)
+      at async Test.run (node:internal/test_runner/test:1409:7)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:974:7)
+
+test at test/v2-managed-persist.test.cjs:131:1
+✖ a corrupt config is treated as stopped rather than crashing (0.582667ms)
+  TypeError [Error]: pet.autoStart is not a function
+      at TestContext.<anonymous> (/Users/alanchen/Local Documents/Dev/dsh-pet/test/v2-managed-persist.test.cjs:134:30)
+      at async Test.run (node:internal/test_runner/test:1409:7)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:974:7)
+
+test at test/v2-renderer-alerts.test.cjs:60:1
+✖ an alert reveals its detail without hover and one chime plays per alert (2.602792ms)
+  AssertionError [ERR_ASSERTION]: completion chimes once
+  
+  0 !== 1
+  
+      at TestContext.<anonymous> (/Users/alanchen/Local Documents/Dev/dsh-pet/test/v2-renderer-alerts.test.cjs:68:10)
+      at Test.runInAsyncScope (node:async_hooks:226:14)
+      at Test.run (node:internal/test_runner/test:1402:25)
+      at Test.start (node:internal/test_runner/test:1262:17)
+      at startSubtestAfterBootstrap (node:internal/test_runner/harness:387:17) {
+    generatedMessage: false,
+    code: 'ERR_ASSERTION',
+    actual: 0,
+    expected: 1,
+    operator: 'strictEqual',
+    diff: 'simple'
+  }
+
+test at test/v2-resume.test.cjs:8:1
+✖ root turn starts are tracked and ends are forgotten (1.058458ms)
+  Error: turn tracking not implemented
+      at noteRootEvent (file:///Users/alanchen/Local%20Documents/Dev/dsh-pet/src/resume.mjs:3:9)
+      at TestContext.<anonymous> (/Users/alanchen/Local Documents/Dev/dsh-pet/test/v2-resume.test.cjs:12:3)
+      at async Test.run (node:internal/test_runner/test:1409:7)
+      at async startSubtestAfterBootstrap (node:internal/test_runner/harness:387:3)
+
+test at test/v2-resume.test.cjs:20:1
+✖ the most recently started root turn wins (0.156458ms)
+  Error: turn tracking not implemented
+      at noteRootEvent (file:///Users/alanchen/Local%20Documents/Dev/dsh-pet/src/resume.mjs:3:9)
+      at TestContext.<anonymous> (/Users/alanchen/Local Documents/Dev/dsh-pet/test/v2-resume.test.cjs:23:3)
+      at async Test.run (node:internal/test_runner/test:1409:7)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:974:7)
+
+test at test/v2-resume.test.cjs:31:1
+✖ subagent work never produces a resume state (0.132208ms)
+  Error: turn tracking not implemented
+      at noteRootEvent (file:///Users/alanchen/Local%20Documents/Dev/dsh-pet/src/resume.mjs:3:9)
+      at TestContext.<anonymous> (/Users/alanchen/Local Documents/Dev/dsh-pet/test/v2-resume.test.cjs:34:3)
+      at async Test.run (node:internal/test_runner/test:1409:7)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:974:7)
+
+test at test/v2-resume.test.cjs:42:1
+✖ an empty tracker has no resume state (0.253ms)
+  Error: turn tracking not implemented
+      at latestActive (file:///Users/alanchen/Local%20Documents/Dev/dsh-pet/src/resume.mjs:7:9)
+      at TestContext.<anonymous> (/Users/alanchen/Local Documents/Dev/dsh-pet/test/v2-resume.test.cjs:44:16)
+      at async Test.run (node:internal/test_runner/test:1409:7)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:974:7)

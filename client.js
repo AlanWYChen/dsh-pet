@@ -3,12 +3,19 @@ window.__ModuleLoader__.load({
   factory(require) {
     const React = require('react');
     const h = React.createElement;
+    const BALANCE_SYMBOLS = { CNY: '¥', USD: '$' };
+    function formatBalance(value, t) {
+      if (!value || value.status !== 'ready' || typeof value.amount !== 'number'
+          || !Number.isFinite(value.amount)) return t('balanceUnavailable');
+      if (!BALANCE_SYMBOLS[value.currency]) return t('balanceUnavailable');
+      return `${BALANCE_SYMBOLS[value.currency]}${value.amount.toFixed(2)}`;
+    }
     return {
       inject: ['slots', 'locale'],
       apply(ctx) {
         const dictionaries = {
-          en: { title: 'Pet', detail: 'Owned by this DSH instance. Closing a tab keeps it running.', on: 'Running', off: 'Stopped', start: 'Start', stop: 'Stop', busy: 'Updating…', failed: 'Could not update desktop pet', retry: 'Retry', loading: 'Loading…', debugMode: 'Debug mode', debugDetail: 'Show mood previews and the test notification in the pet menu.' },
-          zh: { title: '大肥鱼', detail: '由当前 DSH 实例管理，关闭标签页不会停止。', on: '运行中', off: '已停止', start: '启动', stop: '停止', busy: '正在更新…', failed: '无法更新桌面宠物', retry: '重试', loading: '正在加载…', debugMode: '调试模式', debugDetail: '在宠物菜单中显示状态预览和通知测试。' },
+          en: { title: 'Pet', detail: 'Owned by this DSH instance. Closing a tab keeps it running.', on: 'Running', off: 'Stopped', start: 'Start', stop: 'Stop', busy: 'Updating…', failed: 'Could not update desktop pet', retry: 'Retry', loading: 'Loading…', debugMode: 'Debug mode', debugDetail: 'Show mood previews and the test notification in the pet menu.', balance: 'Balance', threshold: 'Low-balance threshold', sound: 'Sound', testNotification: 'Test notification', balanceUnavailable: 'Unavailable' },
+          zh: { title: '大肥鱼', detail: '由当前 DSH 实例管理，关闭标签页不会停止。', on: '运行中', off: '已停止', start: '启动', stop: '停止', busy: '正在更新…', failed: '无法更新桌面宠物', retry: '重试', loading: '正在加载…', debugMode: '调试模式', debugDetail: '在宠物菜单中显示状态预览和通知测试。', balance: '余额', threshold: '低余额提醒阈值', sound: '提示音', testNotification: '测试通知', balanceUnavailable: '暂不可用' },
         };
         for (const [language, dictionary] of Object.entries(dictionaries))
           ctx.effect(() => ctx.locale.register('desktop-pet', language, dictionary));
@@ -21,7 +28,16 @@ window.__ModuleLoader__.load({
           const [debugMode, setDebugMode] = React.useState(null);
           const [debugBusy, setDebugBusy] = React.useState(false);
           const [debugError, setDebugError] = React.useState('');
+          const [balance, setBalance] = React.useState(null);
+          const [threshold, setThreshold] = React.useState(null);
+          const [sound, setSound] = React.useState(true);
           const mounted = React.useRef(true);
+          async function post(action, value) {
+            const body = value === undefined ? { action } : { action, value };
+            const response = await fetch('/api/deepseek-pet', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(body) });
+            if (!response.ok) throw new Error(t('failed'));
+            return response.json();
+          }
           async function update(action) {
             setBusy(true); setError('');
             try {
@@ -42,20 +58,53 @@ window.__ModuleLoader__.load({
             } catch { if (mounted.current) setDebugError(t('failed')); }
             finally { if (mounted.current) setDebugBusy(false); }
           }
+          async function loadBalance() {
+            try {
+              const value = await post('balance');
+              if (!mounted.current) return;
+              setBalance(value?.balance ?? null);
+              if (Number.isFinite(value?.threshold?.amount)) setThreshold(value.threshold.amount);
+            } catch { if (mounted.current) setBalance(null); }
+          }
+          function saveThreshold(raw) {
+            const amount = Number(raw);
+            if (!Number.isFinite(amount) || amount <= 0) return;
+            setThreshold(amount);
+            return post('set-threshold', { currency: 'CNY', amount }).catch(() => {});
+          }
+          function saveSound(checked) {
+            const value = checked === true;
+            setSound(value);
+            return post('set-sound', value).catch(() => {});
+          }
+          function testNotification() {
+            return post('test-notification').catch(() => {});
+          }
           React.useEffect(() => {
-            mounted.current = true; update(); updateDebug();
-            const refresh = () => { update(); updateDebug(); };
+            mounted.current = true; update(); updateDebug(); loadBalance();
+            const refresh = () => { update(); updateDebug(); loadBalance(); };
             window.addEventListener('focus', refresh);
             return () => { mounted.current = false; window.removeEventListener('focus', refresh); };
           }, []);
           return h('div', { className: 'dsp-page' },
-            h('style', null, '.dsp-page{display:flex;flex-direction:column;gap:16px}.dsp-setting{display:flex;align-items:center;justify-content:space-between;gap:24px;padding:16px;border:1px solid var(--dsw-alias-border-l2);border-radius:12px;color:var(--dsw-alias-label-primary);font:inherit;font-size:14px;line-height:20px}.dsp-setting p{margin:4px 0 0;font-size:12px;line-height:18px;color:var(--dsw-alias-label-secondary)}.dsp-setting button{font:inherit;color:var(--dsw-alias-label-primary);background:var(--dsw-alias-bg-layer-2);border:1px solid var(--dsw-alias-border-l2);border-radius:10px;padding:8px 14px;min-height:36px;white-space:nowrap;cursor:pointer}.dsp-setting button:hover:not(:disabled){background:var(--dsw-alias-bg-layer-1)}.dsp-setting button:focus-visible{outline:2px solid var(--dsw-alias-brand-primary);outline-offset:3px}.dsp-setting button:disabled{opacity:.6;cursor:wait}.dsp-setting .dsp-error{color:var(--dsw-alias-state-error-primary)}.dsp-setting input[type=checkbox]{width:18px;height:18px;flex:none;accent-color:var(--dsw-alias-brand-primary);cursor:pointer}.dsp-setting input:focus-visible{outline:2px solid var(--dsw-alias-brand-primary);outline-offset:3px}'),
+            h('style', null, '.dsp-page{display:flex;flex-direction:column;gap:16px}.dsp-setting{display:flex;align-items:center;justify-content:space-between;gap:24px;padding:16px;border:1px solid var(--dsw-alias-border-l2);border-radius:12px;color:var(--dsw-alias-label-primary);font:inherit;font-size:14px;line-height:20px}.dsp-setting p{margin:4px 0 0;font-size:12px;line-height:18px;color:var(--dsw-alias-label-secondary)}.dsp-setting button{font:inherit;color:var(--dsw-alias-label-primary);background:var(--dsw-alias-bg-layer-2);border:1px solid var(--dsw-alias-border-l2);border-radius:10px;padding:8px 14px;min-height:36px;white-space:nowrap;cursor:pointer}.dsp-setting button:hover:not(:disabled){background:var(--dsw-alias-bg-layer-1)}.dsp-setting button:focus-visible{outline:2px solid var(--dsw-alias-brand-primary);outline-offset:3px}.dsp-setting button:disabled{opacity:.6;cursor:wait}.dsp-setting .dsp-error{color:var(--dsw-alias-state-error-primary)}.dsp-setting input[type=checkbox]{width:18px;height:18px;flex:none;accent-color:var(--dsw-alias-brand-primary);cursor:pointer}.dsp-setting input:focus-visible{outline:2px solid var(--dsw-alias-brand-primary);outline-offset:3px}.dsp-setting input[type=number]{width:96px;font:inherit;color:var(--dsw-alias-label-primary);background:var(--dsw-alias-bg-layer-2);border:1px solid var(--dsw-alias-border-l2);border-radius:10px;padding:8px 10px;min-height:36px;margin-top:8px}.dsp-actions{display:flex;align-items:center;gap:12px;flex:none}'),
             h('div', { className: 'dsp-setting' },
             h('div', null, h('div', null, t('title')), h('p', null, t('detail')), status && h('p', { role: 'status' }, status.running ? t('on') : t('off')), error && h('p', { className: 'dsp-error', role: 'alert' }, error)),
             h('button', { type: 'button', disabled: busy, onClick: () => update(!status ? undefined : status.running ? 'disable' : 'enable') }, busy ? t('busy') : !status ? t('retry') : status.running ? t('stop') : t('start'))),
             h('div', { className: 'dsp-setting' },
               h('div', null, h('label', { htmlFor: 'dsp-debug-mode' }, t('debugMode')), h('p', null, t('debugDetail')), debugError && h('p', { className: 'dsp-error', role: 'alert' }, debugError)),
-              h('input', { id: 'dsp-debug-mode', type: 'checkbox', 'aria-label': t('debugMode'), checked: debugMode === true, disabled: debugMode === null || debugBusy, onChange: event => updateDebug(event.target.checked ? 'debug-enable' : 'debug-disable') })));
+              h('input', { id: 'dsp-debug-mode', type: 'checkbox', 'aria-label': t('debugMode'), checked: debugMode === true, disabled: debugMode === null || debugBusy, onChange: event => updateDebug(event.target.checked ? 'debug-enable' : 'debug-disable') })),
+            h('div', { className: 'dsp-setting' },
+              h('div', null,
+                h('div', null, t('balance')),
+                h('p', { role: 'status' }, formatBalance(balance, t)),
+                h('label', { htmlFor: 'dsp-threshold' }, t('threshold')),
+                h('input', { id: 'dsp-threshold', type: 'number', min: 0.01, step: 0.01, 'aria-label': t('threshold'), value: threshold == null ? '' : threshold, onChange: event => saveThreshold(event.target.value) }))),
+            h('div', { className: 'dsp-setting' },
+              h('div', null, h('label', { htmlFor: 'dsp-sound' }, t('sound'))),
+              h('div', { className: 'dsp-actions' },
+                h('input', { id: 'dsp-sound', type: 'checkbox', 'aria-label': t('sound'), checked: sound === true, onChange: event => saveSound(event.target.checked) }),
+                h('button', { id: 'dsp-test-notification', type: 'button', onClick: testNotification }, t('testNotification')))));
         }
         ctx.slots.inject('settings.section', () => ctx.slots.register({ name: 'settings.section', id: 'deepseek-desktop-pet', order: 46, label: () => t('title') }, PetSetting));
       },

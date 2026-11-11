@@ -1,0 +1,144 @@
+{
+  "increment": 2,
+  "created": "2026-11-11T00:38:09.316Z",
+  "command": "npm test",
+  "protectedTests": [
+    {
+      "file": "test/active-artwork.test.cjs",
+      "sha256": "0af5da8427d83af606699168bbb06c7d94ff4332c911b95033f887f42ebe7a88"
+    },
+    {
+      "file": "test/active-thinking.test.cjs",
+      "sha256": "ab6b4ced5a0fb2c02fe889e08bcb215928b859e8fbfa88128b418ebe907e9ed8"
+    },
+    {
+      "file": "test/client-tab.test.cjs",
+      "sha256": "c123a0b391166491cfe9a297f79596d1c067e97e3498a2f7a722448fd5dcfbbb"
+    },
+    {
+      "file": "test/compact-bubble.test.cjs",
+      "sha256": "742077130b10a2bf1a8dd72519ecd51417fac7fbd68415fed23d4e048696b5d5"
+    },
+    {
+      "file": "test/debug-mode.test.cjs",
+      "sha256": "a3e9f74856e6129dc42a9183dd088e7322b7b6bb0cf9e0b70ffdd40b3c1afb17"
+    },
+    {
+      "file": "test/debug-validation.test.cjs",
+      "sha256": "fd6c112a5729ecd12f02a28e04f1079851e1852f772856e008edb81b74d01ad6"
+    },
+    {
+      "file": "test/event-audit.test.cjs",
+      "sha256": "02c3920caf244e51786aeacf52078280f4708ce787718bef9c6c93f7c270d731"
+    },
+    {
+      "file": "test/event-diagnostics.test.cjs",
+      "sha256": "9b95c816aee923958846bc8a2ee2f06eddc11450ee70bcf1ccd61bafa45aefe0"
+    },
+    {
+      "file": "test/managed-helper.test.cjs",
+      "sha256": "13528fa0c34805ad454bf6ed86aec95c76f38a1a1ef9096e8f1dd8c6a8297f63"
+    },
+    {
+      "file": "test/pet-name.test.cjs",
+      "sha256": "79a6dc02ca2dd07324c161f7520d7d6ea367df8a002a62b1cef7648bca1949e3"
+    },
+    {
+      "file": "test/pet.test.cjs",
+      "sha256": "e00aa775151e75d4d78fd9ba51afbe4fb6fb7cbb1344fd1f17c19ae7acd06d67"
+    },
+    {
+      "file": "test/plugin-meta.test.cjs",
+      "sha256": "3aa2e51116cf30e68829474b220f08d145737f626e0240763547c5c1427ffca7"
+    },
+    {
+      "file": "test/pointer-drag.test.cjs",
+      "sha256": "6b25212f126e8e996adadf622ac2dc5dca62a2ca0d606c5df1c53466ab96bfdc"
+    },
+    {
+      "file": "test/renderer-global.test.cjs",
+      "sha256": "b9716691c8bf63b61734e80eb93f4ba5b917c3f14f6d436c232b232ca5bdba1b"
+    },
+    {
+      "file": "test/setting-transport.test.cjs",
+      "sha256": "41caea74487e664e827f99a1eb54777c761304bc3350fe8c43c562079ccbbfb8"
+    },
+    {
+      "file": "test/settings-actions.test.cjs",
+      "sha256": "c2bc4adb5fe3f1a523a024de430f6281e9a4af08b190aa0e94c99a693a6968b2"
+    },
+    {
+      "file": "test/v2-balance-api.test.cjs",
+      "sha256": "14f9dea0913c5d56db8f8ce246ab6be7e13dc360fbb0820c0155be7f22a543ef"
+    },
+    {
+      "file": "test/v2-balance-host.test.cjs",
+      "sha256": "bff24df77cc14109363f140b70a16f9858d806e1fc96a80467266ee88fb5ccf5"
+    },
+    {
+      "file": "test/v2-balance-watcher.test.cjs",
+      "sha256": "d8b881ce8d74f727b97a0d118ea2eafece3d5d347c9ece0c18458773949bd5cd"
+    },
+    {
+      "file": "test/v2-balance.test.cjs",
+      "sha256": "99d11a80400a21fe9b529412db31fec6a8cab8dde239a996d43695ca1edea83b"
+    },
+    {
+      "file": "test/v2-config.test.cjs",
+      "sha256": "8fd46466537661169ae448847ed1d35438b3846395e7e6d2430d3755e71a462a"
+    },
+    {
+      "file": "test/v2-main-alerts.test.cjs",
+      "sha256": "96446d004d0f6b1223111b6b3098976bd7145308d9ec7422464dc8246b79db32"
+    },
+    {
+      "file": "test/v2-main-sound.test.cjs",
+      "sha256": "0391243bbcb105d377be1905ca0531e8087f094d40cecbd1844fad72d2fdce9c"
+    },
+    {
+      "file": "test/v2-managed-persist.test.cjs",
+      "sha256": "581c93d09403c44d998fcf51dbeb344f65aeeb1679d627b7af03bfd9ca976a60"
+    },
+    {
+      "file": "test/v2-renderer-alerts.test.cjs",
+      "sha256": "0cd6a7d71a61f49718744517f35104b5e96147905c766b98863f62d447779267"
+    },
+    {
+      "file": "test/v2-resume.test.cjs",
+      "sha256": "b01ab79d94ff0fd1fad9200e63d0f1a2a6406778bbac250fe05741d75b21c88c"
+    },
+    {
+      "file": "test/v2-settings-balance.test.cjs",
+      "sha256": "fbb3f639e9ea8e346bc94272bd44a35f358ced3137d09abc4766a7fa1f481385"
+    },
+    {
+      "file": "test/v2-tool-schema.test.cjs",
+      "sha256": "dce861baf5f080b590748f61ce01e4d80587382b3d42fb7602b0f50ffb0df8b8"
+    },
+    {
+      "file": "test/window-position.test.cjs",
+      "sha256": "d11cc2b382dfc2fad29c59b29fb6d70b594ae74d39e3c55b1a853f034edff4e9"
+    }
+  ],
+  "packageJson": {
+    "sha256": "0a9304e8e4465a4fdef6f1ad3bf6431a5684c86bdbb2103cf09f7e5a952738c6",
+    "testScript": "node --test test/*.test.cjs"
+  },
+  "scaffolds": [
+    {
+      "file": "src/balance.mjs",
+      "sha256": "c94ce40200afa2cadd4e37dda674bb580e87db8cd8d9b89afe628b290652c25e"
+    },
+    {
+      "file": "src/balance-watcher.mjs",
+      "sha256": "474419a73887768d42048239f23dceb6564312cd86dfae71844f21fd5b7135be"
+    },
+    {
+      "file": "src/balance-host.mjs",
+      "sha256": "008fbc9bd551fcc984c6464a4c59594cc0ed8c5665e186e811a254d7835ab49d"
+    }
+  ],
+  "revision": 4,
+  "revisedAt": "2026-11-11T01:11:19.755Z",
+  "revisionNote": "User-approved frozen-test correction (test/v2-balance.test.cjs): bonus fixture 4.50->3.50 and amount 5.5->4.5 so the bonus-inclusive low case is logically consistent (< 5 CNY). No production behavior changed for this correction. | Added test/v2-tool-schema.test.cjs (agent tool value payload); RED recorded in docs/v2-tool-schema-red.txt. | Added test/plugin-meta.test.cjs for the dsh-desktop-pet registration name and supplied tail icon."
+}

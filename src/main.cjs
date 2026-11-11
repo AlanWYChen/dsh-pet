@@ -6,6 +6,16 @@ const crypto = require('node:crypto');
 const { createBridge } = require('./bridge.cjs');
 const { PetState } = require('./state.cjs');
 const managed = process.env.DSH_PET_MANAGED === '1';
+// Mutable: the Host may update the effective sound setting at runtime through a
+// pet:config message, and the context menu can mute or unmute notifications.
+let soundEnabled = process.env.DSH_PET_SOUND !== '0';
+const WINDOW_WIDTH = 260;
+const WINDOW_HEIGHT = 270;
+const WINDOW_MARGIN_X = 24;
+const WINDOW_MARGIN_Y = 20;
+const VISIBLE_MARGIN = 48;
+const ALERT_STATES = new Set(['done', 'permission', 'error', 'hungry', 'low-balance']);
+const RENDERED_STATES = ['sleeping', 'thinking', 'done', 'permission', 'hungry', 'error', 'low-balance'];
 const dshUrl = (() => {
   try {
     const url = new URL(process.env.DSH_PET_URL || 'http://127.0.0.1:3080');
@@ -13,14 +23,17 @@ const dshUrl = (() => {
   } catch {}
   return 'http://127.0.0.1:3080';
 })();
-let win, bridge, idleTimer;
+let win, bridge, positionTimer;
 let debugMode = process.env.DSH_PET_DEBUG === '1';
 if (managed) {
   process.on('disconnect', () => app.quit());
   process.on('message', message => {
     if (message?.type === 'shutdown') app.quit();
     else if (message?.type === 'pet:event') receive(message.event);
-    else if (message?.type === 'pet:config' && typeof message.debugMode === 'boolean') debugMode = message.debugMode;
+    else if (message?.type === 'pet:config') {
+      if (typeof message.debugMode === 'boolean') debugMode = message.debugMode;
+      if (typeof message.sound === 'boolean') soundEnabled = message.sound;
+    }
   });
 }
 let muted = false;
@@ -28,28 +41,119 @@ const permissionNotifications = new Map();
 const state = new PetState();
 const configDir = path.join(os.homedir(), '.dsh-pet');
 const configPath = path.join(configDir, 'bridge.json');
+
+// A saved position is honoured only while a meaningful part of the window still
+// overlaps a connected display's work area. Anything else opens bottom-right.
+function savedPosition() {
+  const raw = process.env.DSH_PET_POSITION;
+  if (typeof raw !== 'string' || !raw) return null;
+  let value;
+  try { value = JSON.parse(raw); } catch { return null; }
+  if (!value || typeof value !== 'object') return null;
+  if (!Number.isFinite(value.x) || !Number.isFinite(value.y)) return null;
+  return { x: Math.round(value.x), y: Math.round(value.y) };
+}
+function workAreas() {
+  try {
+    const displays = screen.getAllDisplays?.();
+    if (Array.isArray(displays) && displays.length) {
+      return displays.map(display => display?.workArea).filter(Boolean);
+    }
+  } catch {}
+  try {
+    const primary = screen.getPrimaryDisplay?.();
+    if (primary?.workArea) return [primary.workArea];
+  } catch {}
+  return [];
+}
+function visibleOnDisplay(position) {
+  return workAreas().some(area => {
+    if (!area) return false;
+    const horizontal = Math.min(position.x + WINDOW_WIDTH, area.x + area.width) - Math.max(position.x, area.x);
+    const vertical = Math.min(position.y + WINDOW_HEIGHT, area.y + area.height) - Math.max(position.y, area.y);
+    return horizontal >= VISIBLE_MARGIN && vertical >= VISIBLE_MARGIN;
+  });
+}
+function startPosition(area) {
+  const fallback = {
+    x: area.x + area.width - WINDOW_WIDTH - WINDOW_MARGIN_X,
+    y: area.y + area.height - WINDOW_HEIGHT - WINDOW_MARGIN_Y,
+  };
+  const saved = savedPosition();
+  return saved && visibleOnDisplay(saved) ? saved : fallback;
+}
+function reportPosition() {
+  if (!managed || !win || win.isDestroyed?.() || !process.connected || typeof process.send !== 'function') return;
+  let bounds;
+  try { bounds = win.getBounds?.(); } catch {}
+  if (!bounds || !Number.isFinite(bounds.x) || !Number.isFinite(bounds.y)) return;
+  try {
+    process.send({ type: 'pet:position', x: Math.round(bounds.x), y: Math.round(bounds.y) }, () => {});
+  } catch {}
+}
+// One debounced report per finished drag; a burst of native move events cannot
+// corrupt the persisted config.
+function schedulePositionReport() {
+  clearTimeout(positionTimer);
+  positionTimer = setTimeout(reportPosition, 250);
+}
+
 function publish(event) {
-  if (win && !win.isDestroyed()) win.webContents.send('pet:event', event);
+  if (win && !win.isDestroyed()) win.webContents.send('pet:event', { ...event, sound: soundEnabled });
+}
+function raiseAlertWindow() {
+  if (!win || win.isDestroyed?.()) return;
+  // Surface without stealing keyboard focus; every call is optional for the
+  // oldest minimal Electron fakes and for non-macOS windowing.
+  try { win.setAlwaysOnTop?.(true); } catch {}
+  try { win.showInactive?.(); } catch {}
+  try { win.moveTop?.(); } catch {}
+}
+const NOTIFICATION_COPY = {
+  done: { title: '蓝色大肥鱼 · Reply ready', body: 'Your DSH chat has finished responding.' },
+  permission: { title: '蓝色大肥鱼 · Permission needed', body: 'A running session needs your approval. Open DSH to review.' },
+  error: { title: '蓝色大肥鱼 · Something went wrong', body: 'Your chat stopped. Open DSH to check.' },
+  hungry: { title: '蓝色大肥鱼 · Token limit reached', body: 'This turn reached its token limit.' },
+  'low-balance': { title: '蓝色大肥鱼 · Low balance', body: 'Your DeepSeek balance is low. Open DSH to top up.' },
+};
+// Best-effort OS channel, attempted on every alert. The in-window bubble never
+// depends on it working.
+function notifyAlert(event) {
+  if (muted) return;
+  if (!Notification || typeof Notification.isSupported !== 'function' || !Notification.isSupported()) return;
+  const copy = NOTIFICATION_COPY[event.state];
+  if (!copy) return;
+  try {
+    const body = event.state === 'low-balance' && event.title
+      ? `Current balance: ${event.title}. Open DSH to top up.`
+      : (event.title && event.state === 'done' ? event.title : copy.body);
+    const notification = new Notification({ title: copy.title, body, silent: false });
+    notification.on('click', () => shell.openExternal(dshUrl));
+    if (event.state === 'permission') {
+      permissionNotifications.set(JSON.stringify([event.sessionId, event.requestId]), {
+        notification, sessionId: event.sessionId, requestId: event.requestId,
+      });
+    }
+    notification.show();
+  } catch {}
 }
 function receive(input) {
-  const event = state.accept(input);
+  let event;
+  try { event = state.accept(input); } catch { return; }
   if (!event) return;
-  clearTimeout(idleTimer);
   for (const [key, entry] of permissionNotifications) {
     if (entry.sessionId !== event.sessionId) continue;
-    if ((event.state === 'permission-resolved' && entry.requestId === event.requestId) || ['done', 'sleeping', 'error', 'hungry'].includes(event.state)) {
-      entry.notification.close(); permissionNotifications.delete(key);
+    if ((event.state === 'permission-resolved' && entry.requestId === event.requestId)
+        || ['done', 'sleeping', 'error', 'hungry', 'low-balance'].includes(event.state)) {
+      try { entry.notification.close(); } catch {}
+      permissionNotifications.delete(key);
     }
   }
   publish(state.current);
-  if (['done', 'permission'].includes(event.state) && !muted && Notification.isSupported()) {
-    const permission = event.state === 'permission';
-    const notification = new Notification({ title: permission ? '蓝色大肥鱼 · Permission needed' : '蓝色大肥鱼 · Reply ready', body: permission ? 'A running session needs your approval. Open DSH to review.' : event.title || 'Your DSH chat has finished responding.', silent: false });
-    notification.on('click', () => shell.openExternal(dshUrl));
-    if (permission) permissionNotifications.set(JSON.stringify([event.sessionId, event.requestId]), { notification, sessionId: event.sessionId, requestId: event.requestId });
-    notification.show();
+  if (ALERT_STATES.has(event.state)) {
+    raiseAlertWindow();
+    notifyAlert(event);
   }
-  if (['done', 'error', 'hungry'].includes(event.state)) idleTimer = setTimeout(() => publish(state.idle()), 16000);
 }
 if ((managed && (!process.send || !process.connected)) || (!managed && !app.requestSingleInstanceLock())) app.quit();
 else {
@@ -65,18 +169,23 @@ else {
     fs.chmodSync(configPath, 0o600);
     }
     const area = screen.getPrimaryDisplay().workArea;
-    win = new BrowserWindow({ width: 260, height: 270, x: area.x + area.width - 284, y: area.y + area.height - 290,
+    const start = startPosition(area);
+    win = new BrowserWindow({ width: WINDOW_WIDTH, height: WINDOW_HEIGHT, x: start.x, y: start.y,
       frame: false, transparent: true, resizable: false, alwaysOnTop: true, hasShadow: false,
       webPreferences: { preload: path.join(__dirname, 'preload.cjs'), contextIsolation: true, nodeIntegration: false, sandbox: true } });
     win.setVisibleOnAllWorkspaces(true, { visibleOnFullScreen: true });
     win.webContents.setWindowOpenHandler(() => ({ action: 'deny' }));
     win.webContents.on('will-navigate', event => event.preventDefault());
+    if (typeof win.on === 'function') {
+      win.on('moved', schedulePositionReport);
+      win.on('move', schedulePositionReport);
+    }
     ipcMain.on('pet:rendered', (event, renderedState) => {
       if (!managed || event.sender !== win.webContents || win.isDestroyed() || !process.connected
-          || !['sleeping', 'thinking', 'done', 'permission', 'hungry', 'error'].includes(renderedState)) return;
+          || !RENDERED_STATES.includes(renderedState)) return;
       process.send({ type: 'pet:state', state: renderedState }, error => { if (error) app.quit(); });
     });
-    win.webContents.on('did-finish-load', () => publish(state.current));
+    win.webContents.on('did-finish-load', () => { publish(state.current); reportPosition(); });
     await win.loadFile(path.join(__dirname, 'pet.html'));
     if (managed) {
       if (!process.connected) { app.quit(); return; }
@@ -93,12 +202,14 @@ else {
         { label: 'Try completion notification', click: () => { if (debugMode) receive({ state: 'done', title: 'Your reply is ready. Come take a look!' }); } },
         ...['sleeping', 'thinking', 'hungry'].map(s => ({ label: `Preview ${s}`, click: () => { if (debugMode) receive({ state: s, sessionId: 'preview' }); } })),
       ] : []),
-      { label: 'Mute notifications', type: 'checkbox', checked: muted, click: item => { muted = item.checked; } },
+      { label: 'Mute notifications', type: 'checkbox', checked: muted || !soundEnabled, click: item => { muted = item.checked === true; soundEnabled = !muted; } },
       { type: 'separator' }, { label: 'Quit pet', click: () => app.quit() }
     ]).popup({ window: win }));
     ipcMain.on('pet:open', () => shell.openExternal(dshUrl));
-    ipcMain.on('pet:ack', () => { clearTimeout(idleTimer); publish(state.idle()); });
+    // Alerts persist until acknowledged or replaced; there is deliberately no
+    // inactivity timer that could hide a notification after 16 seconds.
+    ipcMain.on('pet:ack', () => publish(state.idle()));
   }).catch(() => app.quit());
   app.on('window-all-closed', () => app.quit());
-  app.on('before-quit', () => { clearTimeout(idleTimer); bridge?.close(); });
+  app.on('before-quit', () => { clearTimeout(positionTimer); bridge?.close(); });
 }

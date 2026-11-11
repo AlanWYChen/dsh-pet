@@ -1,0 +1,389 @@
+✖ the balance action reports the live balance and threshold (19.876167ms)
+✖ set-threshold validates, persists, and updates the live watcher (7.281959ms)
+✔ set-threshold rejects {"currency":"CNY","amount":0} without changing state (0.935667ms)
+✔ set-threshold rejects {"currency":"CNY","amount":-3} without changing state (1.491792ms)
+✔ set-threshold rejects {"currency":"USD","amount":5} without changing state (0.952334ms)
+✔ set-threshold rejects {"currency":"CNY","amount":"many"} without changing state (0.7855ms)
+✔ set-threshold rejects null without changing state (0.68375ms)
+✔ the endpoint is bounded at 256 bytes (0.912166ms)
+✖ test-notification sends one completion event and set-sound persists (0.703667ms)
+✔ existing status shape is unchanged for the protected settings harness (1.130291ms)
+✖ a low balance sends one low-balance event with the formatted amount (0.553959ms)
+✖ a healthy balance stays silent and is readable through state() (0.096959ms)
+✖ a missing account service is inert rather than fatal (0.089375ms)
+✖ a failed query does not send a false alert (0.078333ms)
+✖ the configured threshold is live and the watcher stops on cleanup (0.63975ms)
+✖ a helper that is not running still records the balance state (0.0895ms)
+✖ start checks immediately, schedules five-minute polls, and alerts once (0.547833ms)
+✖ the DeepSeek client metadata is sent with the query (0.103375ms)
+✖ recovery resets the warning and a later dip alerts again (0.09425ms)
+✖ a failed or absent balance query never alerts and never throws (0.100542ms)
+✖ a lowered threshold re-evaluates on the next poll (0.812667ms)
+✖ usable balance sums main and bonus CNY wallets in exact cents (0.52125ms)
+✖ usable balance ignores other currencies and unavailable results (0.075208ms)
+✖ balances are formatted with their currency symbol (0.063875ms)
+✖ a first low balance alerts and records the alert time (0.067417ms)
+✖ a still-low balance does not alert again inside 24 hours, but does afterwards (0.069125ms)
+✖ recovery clears the low state and a new dip alerts immediately (0.637958ms)
+✖ an unavailable balance never alerts and keeps the previous dedupe state (0.217625ms)
+✖ the threshold includes bonus credit (0.100917ms)
+✔ the sound setting rides on every published event (12.902917ms)
+✖ a pet:config sound update applies to later alerts (4.603541ms)
+✖ the context menu mute silences the chime flag (1.831125ms)
+✖ the settings page loads the live balance alongside status and debug state (3.533667ms)
+✖ the threshold, sound, and test controls speak the documented actions (0.8995ms)
+ℹ tests 34
+ℹ suites 0
+ℹ pass 8
+ℹ fail 26
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 115.915
+
+✖ failing tests:
+
+test at test/v2-balance-api.test.cjs:72:1
+✖ the balance action reports the live balance and threshold (19.876167ms)
+  Error: Unknown pet action
+      at operate (index.mjs:59:56)
+      at Object.execute (index.mjs:104:28)
+      at TestContext.<anonymous> (/Users/alanchen/Local Documents/Dev/dsh-pet/test/v2-balance-api.test.cjs:74:34)
+      at Test.runInAsyncScope (node:async_hooks:226:14)
+      at Test.run (node:internal/test_runner/test:1402:25)
+      at Test.start (node:internal/test_runner/test:1262:17)
+      at startSubtestAfterBootstrap (node:internal/test_runner/harness:387:17)
+
+test at test/v2-balance-api.test.cjs:81:1
+✖ set-threshold validates, persists, and updates the live watcher (7.281959ms)
+  AssertionError [ERR_ASSERTION]: Expected values to be strictly equal:
+  
+  400 !== 200
+  
+      at TestContext.<anonymous> (/Users/alanchen/Local Documents/Dev/dsh-pet/test/v2-balance-api.test.cjs:84:10)
+      at async Test.run (node:internal/test_runner/test:1409:7)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:974:7) {
+    generatedMessage: true,
+    code: 'ERR_ASSERTION',
+    actual: 400,
+    expected: 200,
+    operator: 'strictEqual',
+    diff: 'simple'
+  }
+
+test at test/v2-balance-api.test.cjs:111:1
+✖ test-notification sends one completion event and set-sound persists (0.703667ms)
+  AssertionError [ERR_ASSERTION]: Expected values to be strictly equal:
+  
+  400 !== 200
+  
+      at TestContext.<anonymous> (/Users/alanchen/Local Documents/Dev/dsh-pet/test/v2-balance-api.test.cjs:114:10)
+      at async Test.run (node:internal/test_runner/test:1409:7)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:974:7) {
+    generatedMessage: true,
+    code: 'ERR_ASSERTION',
+    actual: 400,
+    expected: 200,
+    operator: 'strictEqual',
+    diff: 'simple'
+  }
+
+test at test/v2-balance-host.test.cjs:36:1
+✖ a low balance sends one low-balance event with the formatted amount (0.553959ms)
+  Error: balance host not implemented
+      at startBalance (file:///Users/alanchen/Local%20Documents/Dev/dsh-pet/src/balance-host.mjs:3:9)
+      at mount (/Users/alanchen/Local Documents/Dev/dsh-pet/test/v2-balance-host.test.cjs:25:16)
+      at TestContext.<anonymous> (/Users/alanchen/Local Documents/Dev/dsh-pet/test/v2-balance-host.test.cjs:37:36)
+      at Test.runInAsyncScope (node:async_hooks:226:14)
+      at Test.run (node:internal/test_runner/test:1402:25)
+      at Test.start (node:internal/test_runner/test:1262:17)
+      at startSubtestAfterBootstrap (node:internal/test_runner/harness:387:17)
+
+test at test/v2-balance-host.test.cjs:48:1
+✖ a healthy balance stays silent and is readable through state() (0.096959ms)
+  Error: balance host not implemented
+      at startBalance (file:///Users/alanchen/Local%20Documents/Dev/dsh-pet/src/balance-host.mjs:3:9)
+      at mount (/Users/alanchen/Local Documents/Dev/dsh-pet/test/v2-balance-host.test.cjs:25:16)
+      at TestContext.<anonymous> (/Users/alanchen/Local Documents/Dev/dsh-pet/test/v2-balance-host.test.cjs:49:26)
+      at Test.runInAsyncScope (node:async_hooks:226:14)
+      at Test.run (node:internal/test_runner/test:1402:25)
+      at Test.processPendingSubtests (node:internal/test_runner/test:974:18)
+      at Test.postRun (node:internal/test_runner/test:1542:19)
+      at Test.run (node:internal/test_runner/test:1467:12)
+      at async startSubtestAfterBootstrap (node:internal/test_runner/harness:387:3)
+
+test at test/v2-balance-host.test.cjs:56:1
+✖ a missing account service is inert rather than fatal (0.089375ms)
+  Error: balance host not implemented
+      at startBalance (file:///Users/alanchen/Local%20Documents/Dev/dsh-pet/src/balance-host.mjs:3:9)
+      at TestContext.<anonymous> (/Users/alanchen/Local Documents/Dev/dsh-pet/test/v2-balance-host.test.cjs:58:16)
+      at Test.runInAsyncScope (node:async_hooks:226:14)
+      at Test.run (node:internal/test_runner/test:1402:25)
+      at Test.processPendingSubtests (node:internal/test_runner/test:974:18)
+      at Test.postRun (node:internal/test_runner/test:1542:19)
+      at Test.run (node:internal/test_runner/test:1467:12)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:974:7)
+
+test at test/v2-balance-host.test.cjs:65:1
+✖ a failed query does not send a false alert (0.078333ms)
+  Error: balance host not implemented
+      at startBalance (file:///Users/alanchen/Local%20Documents/Dev/dsh-pet/src/balance-host.mjs:3:9)
+      at mount (/Users/alanchen/Local Documents/Dev/dsh-pet/test/v2-balance-host.test.cjs:25:16)
+      at TestContext.<anonymous> (/Users/alanchen/Local Documents/Dev/dsh-pet/test/v2-balance-host.test.cjs:66:26)
+      at Test.runInAsyncScope (node:async_hooks:226:14)
+      at Test.run (node:internal/test_runner/test:1402:25)
+      at Test.processPendingSubtests (node:internal/test_runner/test:974:18)
+      at Test.postRun (node:internal/test_runner/test:1542:19)
+      at Test.run (node:internal/test_runner/test:1467:12)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:974:7)
+
+test at test/v2-balance-host.test.cjs:72:1
+✖ the configured threshold is live and the watcher stops on cleanup (0.63975ms)
+  Error: balance host not implemented
+      at startBalance (file:///Users/alanchen/Local%20Documents/Dev/dsh-pet/src/balance-host.mjs:3:9)
+      at mount (/Users/alanchen/Local Documents/Dev/dsh-pet/test/v2-balance-host.test.cjs:25:16)
+      at TestContext.<anonymous> (/Users/alanchen/Local Documents/Dev/dsh-pet/test/v2-balance-host.test.cjs:73:48)
+      at Test.runInAsyncScope (node:async_hooks:226:14)
+      at Test.run (node:internal/test_runner/test:1402:25)
+      at Test.processPendingSubtests (node:internal/test_runner/test:974:18)
+      at Test.postRun (node:internal/test_runner/test:1542:19)
+      at Test.run (node:internal/test_runner/test:1467:12)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:974:7)
+
+test at test/v2-balance-host.test.cjs:83:1
+✖ a helper that is not running still records the balance state (0.0895ms)
+  Error: balance host not implemented
+      at startBalance (file:///Users/alanchen/Local%20Documents/Dev/dsh-pet/src/balance-host.mjs:3:9)
+      at TestContext.<anonymous> (/Users/alanchen/Local Documents/Dev/dsh-pet/test/v2-balance-host.test.cjs:86:16)
+      at Test.runInAsyncScope (node:async_hooks:226:14)
+      at Test.run (node:internal/test_runner/test:1402:25)
+      at Test.processPendingSubtests (node:internal/test_runner/test:974:18)
+      at Test.postRun (node:internal/test_runner/test:1542:19)
+      at Test.run (node:internal/test_runner/test:1467:12)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:974:7)
+
+test at test/v2-balance-watcher.test.cjs:28:1
+✖ start checks immediately, schedules five-minute polls, and alerts once (0.547833ms)
+  Error: balance watcher not implemented
+      at createBalanceWatcher (file:///Users/alanchen/Local%20Documents/Dev/dsh-pet/src/balance-watcher.mjs:3:9)
+      at setup (/Users/alanchen/Local Documents/Dev/dsh-pet/test/v2-balance-watcher.test.cjs:15:19)
+      at TestContext.<anonymous> (/Users/alanchen/Local Documents/Dev/dsh-pet/test/v2-balance-watcher.test.cjs:29:31)
+      at Test.runInAsyncScope (node:async_hooks:226:14)
+      at Test.run (node:internal/test_runner/test:1402:25)
+      at Test.start (node:internal/test_runner/test:1262:17)
+      at startSubtestAfterBootstrap (node:internal/test_runner/harness:387:17)
+
+test at test/v2-balance-watcher.test.cjs:45:1
+✖ the DeepSeek client metadata is sent with the query (0.103375ms)
+  Error: balance watcher not implemented
+      at createBalanceWatcher (file:///Users/alanchen/Local%20Documents/Dev/dsh-pet/src/balance-watcher.mjs:3:9)
+      at setup (/Users/alanchen/Local Documents/Dev/dsh-pet/test/v2-balance-watcher.test.cjs:15:19)
+      at TestContext.<anonymous> (/Users/alanchen/Local Documents/Dev/dsh-pet/test/v2-balance-watcher.test.cjs:47:23)
+      at Test.runInAsyncScope (node:async_hooks:226:14)
+      at Test.run (node:internal/test_runner/test:1402:25)
+      at Test.processPendingSubtests (node:internal/test_runner/test:974:18)
+      at Test.postRun (node:internal/test_runner/test:1542:19)
+      at Test.run (node:internal/test_runner/test:1467:12)
+      at async startSubtestAfterBootstrap (node:internal/test_runner/harness:387:3)
+
+test at test/v2-balance-watcher.test.cjs:58:1
+✖ recovery resets the warning and a later dip alerts again (0.09425ms)
+  Error: balance watcher not implemented
+      at createBalanceWatcher (file:///Users/alanchen/Local%20Documents/Dev/dsh-pet/src/balance-watcher.mjs:3:9)
+      at setup (/Users/alanchen/Local Documents/Dev/dsh-pet/test/v2-balance-watcher.test.cjs:15:19)
+      at TestContext.<anonymous> (/Users/alanchen/Local Documents/Dev/dsh-pet/test/v2-balance-watcher.test.cjs:60:31)
+      at Test.runInAsyncScope (node:async_hooks:226:14)
+      at Test.run (node:internal/test_runner/test:1402:25)
+      at Test.processPendingSubtests (node:internal/test_runner/test:974:18)
+      at Test.postRun (node:internal/test_runner/test:1542:19)
+      at Test.run (node:internal/test_runner/test:1467:12)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:974:7)
+
+test at test/v2-balance-watcher.test.cjs:71:1
+✖ a failed or absent balance query never alerts and never throws (0.100542ms)
+  Error: balance watcher not implemented
+      at createBalanceWatcher (file:///Users/alanchen/Local%20Documents/Dev/dsh-pet/src/balance-watcher.mjs:3:9)
+      at setup (/Users/alanchen/Local Documents/Dev/dsh-pet/test/v2-balance-watcher.test.cjs:15:19)
+      at TestContext.<anonymous> (/Users/alanchen/Local Documents/Dev/dsh-pet/test/v2-balance-watcher.test.cjs:72:19)
+      at Test.runInAsyncScope (node:async_hooks:226:14)
+      at Test.run (node:internal/test_runner/test:1402:25)
+      at Test.processPendingSubtests (node:internal/test_runner/test:974:18)
+      at Test.postRun (node:internal/test_runner/test:1542:19)
+      at Test.run (node:internal/test_runner/test:1467:12)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:974:7)
+
+test at test/v2-balance-watcher.test.cjs:89:1
+✖ a lowered threshold re-evaluates on the next poll (0.812667ms)
+  Error: balance watcher not implemented
+      at createBalanceWatcher (file:///Users/alanchen/Local%20Documents/Dev/dsh-pet/src/balance-watcher.mjs:3:9)
+      at setup (/Users/alanchen/Local Documents/Dev/dsh-pet/test/v2-balance-watcher.test.cjs:15:19)
+      at TestContext.<anonymous> (/Users/alanchen/Local Documents/Dev/dsh-pet/test/v2-balance-watcher.test.cjs:90:31)
+      at Test.runInAsyncScope (node:async_hooks:226:14)
+      at Test.run (node:internal/test_runner/test:1402:25)
+      at Test.processPendingSubtests (node:internal/test_runner/test:974:18)
+      at Test.postRun (node:internal/test_runner/test:1542:19)
+      at Test.run (node:internal/test_runner/test:1467:12)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:974:7)
+
+test at test/v2-balance.test.cjs:12:1
+✖ usable balance sums main and bonus CNY wallets in exact cents (0.52125ms)
+  Error: balance not implemented
+      at usableBalance (file:///Users/alanchen/Local%20Documents/Dev/dsh-pet/src/balance.mjs:5:9)
+      at TestContext.<anonymous> (/Users/alanchen/Local Documents/Dev/dsh-pet/test/v2-balance.test.cjs:14:20)
+      at Test.runInAsyncScope (node:async_hooks:226:14)
+      at Test.run (node:internal/test_runner/test:1402:25)
+      at Test.start (node:internal/test_runner/test:1262:17)
+      at startSubtestAfterBootstrap (node:internal/test_runner/harness:387:17)
+
+test at test/v2-balance.test.cjs:19:1
+✖ usable balance ignores other currencies and unavailable results (0.075208ms)
+  Error: balance not implemented
+      at usableBalance (file:///Users/alanchen/Local%20Documents/Dev/dsh-pet/src/balance.mjs:5:9)
+      at TestContext.<anonymous> (/Users/alanchen/Local Documents/Dev/dsh-pet/test/v2-balance.test.cjs:20:16)
+      at Test.runInAsyncScope (node:async_hooks:226:14)
+      at Test.run (node:internal/test_runner/test:1402:25)
+      at Test.processPendingSubtests (node:internal/test_runner/test:974:18)
+      at Test.postRun (node:internal/test_runner/test:1542:19)
+      at Test.run (node:internal/test_runner/test:1467:12)
+      at async startSubtestAfterBootstrap (node:internal/test_runner/harness:387:3)
+
+test at test/v2-balance.test.cjs:27:1
+✖ balances are formatted with their currency symbol (0.063875ms)
+  Error: balance not implemented
+      at formatBalance (file:///Users/alanchen/Local%20Documents/Dev/dsh-pet/src/balance.mjs:9:9)
+      at TestContext.<anonymous> (/Users/alanchen/Local Documents/Dev/dsh-pet/test/v2-balance.test.cjs:28:16)
+      at Test.runInAsyncScope (node:async_hooks:226:14)
+      at Test.run (node:internal/test_runner/test:1402:25)
+      at Test.processPendingSubtests (node:internal/test_runner/test:974:18)
+      at Test.postRun (node:internal/test_runner/test:1542:19)
+      at Test.run (node:internal/test_runner/test:1467:12)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:974:7)
+
+test at test/v2-balance.test.cjs:33:1
+✖ a first low balance alerts and records the alert time (0.067417ms)
+  Error: balance not implemented
+      at evaluateBalance (file:///Users/alanchen/Local%20Documents/Dev/dsh-pet/src/balance.mjs:13:9)
+      at TestContext.<anonymous> (/Users/alanchen/Local Documents/Dev/dsh-pet/test/v2-balance.test.cjs:34:18)
+      at Test.runInAsyncScope (node:async_hooks:226:14)
+      at Test.run (node:internal/test_runner/test:1402:25)
+      at Test.processPendingSubtests (node:internal/test_runner/test:974:18)
+      at Test.postRun (node:internal/test_runner/test:1542:19)
+      at Test.run (node:internal/test_runner/test:1467:12)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:974:7)
+
+test at test/v2-balance.test.cjs:44:1
+✖ a still-low balance does not alert again inside 24 hours, but does afterwards (0.069125ms)
+  Error: balance not implemented
+      at evaluateBalance (file:///Users/alanchen/Local%20Documents/Dev/dsh-pet/src/balance.mjs:13:9)
+      at TestContext.<anonymous> (/Users/alanchen/Local Documents/Dev/dsh-pet/test/v2-balance.test.cjs:45:17)
+      at Test.runInAsyncScope (node:async_hooks:226:14)
+      at Test.run (node:internal/test_runner/test:1402:25)
+      at Test.processPendingSubtests (node:internal/test_runner/test:974:18)
+      at Test.postRun (node:internal/test_runner/test:1542:19)
+      at Test.run (node:internal/test_runner/test:1467:12)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:974:7)
+
+test at test/v2-balance.test.cjs:57:1
+✖ recovery clears the low state and a new dip alerts immediately (0.637958ms)
+  Error: balance not implemented
+      at evaluateBalance (file:///Users/alanchen/Local%20Documents/Dev/dsh-pet/src/balance.mjs:13:9)
+      at TestContext.<anonymous> (/Users/alanchen/Local Documents/Dev/dsh-pet/test/v2-balance.test.cjs:58:21)
+      at Test.runInAsyncScope (node:async_hooks:226:14)
+      at Test.run (node:internal/test_runner/test:1402:25)
+      at Test.processPendingSubtests (node:internal/test_runner/test:974:18)
+      at Test.postRun (node:internal/test_runner/test:1542:19)
+      at Test.run (node:internal/test_runner/test:1467:12)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:974:7)
+
+test at test/v2-balance.test.cjs:69:1
+✖ an unavailable balance never alerts and keeps the previous dedupe state (0.217625ms)
+  Error: balance not implemented
+      at evaluateBalance (file:///Users/alanchen/Local%20Documents/Dev/dsh-pet/src/balance.mjs:13:9)
+      at TestContext.<anonymous> (/Users/alanchen/Local Documents/Dev/dsh-pet/test/v2-balance.test.cjs:71:20)
+      at Test.runInAsyncScope (node:async_hooks:226:14)
+      at Test.run (node:internal/test_runner/test:1402:25)
+      at Test.processPendingSubtests (node:internal/test_runner/test:974:18)
+      at Test.postRun (node:internal/test_runner/test:1542:19)
+      at Test.run (node:internal/test_runner/test:1467:12)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:974:7)
+
+test at test/v2-balance.test.cjs:81:1
+✖ the threshold includes bonus credit (0.100917ms)
+  Error: balance not implemented
+      at evaluateBalance (file:///Users/alanchen/Local%20Documents/Dev/dsh-pet/src/balance.mjs:13:9)
+      at TestContext.<anonymous> (/Users/alanchen/Local Documents/Dev/dsh-pet/test/v2-balance.test.cjs:82:18)
+      at Test.runInAsyncScope (node:async_hooks:226:14)
+      at Test.run (node:internal/test_runner/test:1402:25)
+      at Test.processPendingSubtests (node:internal/test_runner/test:974:18)
+      at Test.postRun (node:internal/test_runner/test:1542:19)
+      at Test.run (node:internal/test_runner/test:1467:12)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:974:7)
+
+test at test/v2-main-sound.test.cjs:86:1
+✖ a pet:config sound update applies to later alerts (4.603541ms)
+  AssertionError [ERR_ASSERTION]: Expected values to be strictly equal:
+  
+  true !== false
+  
+      at TestContext.<anonymous> (/Users/alanchen/Local Documents/Dev/dsh-pet/test/v2-main-sound.test.cjs:90:10)
+      at async Test.run (node:internal/test_runner/test:1409:7)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:974:7) {
+    generatedMessage: true,
+    code: 'ERR_ASSERTION',
+    actual: true,
+    expected: false,
+    operator: 'strictEqual',
+    diff: 'simple'
+  }
+
+test at test/v2-main-sound.test.cjs:93:1
+✖ the context menu mute silences the chime flag (1.831125ms)
+  AssertionError [ERR_ASSERTION]: Expected values to be strictly equal:
+  
+  true !== false
+  
+      at TestContext.<anonymous> (/Users/alanchen/Local Documents/Dev/dsh-pet/test/v2-main-sound.test.cjs:102:10)
+      at async Test.run (node:internal/test_runner/test:1409:7)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:974:7) {
+    generatedMessage: true,
+    code: 'ERR_ASSERTION',
+    actual: true,
+    expected: false,
+    operator: 'strictEqual',
+    diff: 'simple'
+  }
+
+test at test/v2-settings-balance.test.cjs:70:1
+✖ the settings page loads the live balance alongside status and debug state (3.533667ms)
+  AssertionError [ERR_ASSERTION]: balance is requested on mount
+      at TestContext.<anonymous> (/Users/alanchen/Local Documents/Dev/dsh-pet/test/v2-settings-balance.test.cjs:73:10)
+      at async Test.run (node:internal/test_runner/test:1409:7)
+      at async startSubtestAfterBootstrap (node:internal/test_runner/harness:387:3) {
+    generatedMessage: false,
+    code: 'ERR_ASSERTION',
+    actual: false,
+    expected: true,
+    operator: '==',
+    diff: 'simple'
+  }
+
+test at test/v2-settings-balance.test.cjs:82:1
+✖ the threshold, sound, and test controls speak the documented actions (0.8995ms)
+  AssertionError [ERR_ASSERTION]: threshold input exists
+      at TestContext.<anonymous> (/Users/alanchen/Local Documents/Dev/dsh-pet/test/v2-settings-balance.test.cjs:87:10)
+      at Test.runInAsyncScope (node:async_hooks:226:14)
+      at Test.run (node:internal/test_runner/test:1402:25)
+      at Test.processPendingSubtests (node:internal/test_runner/test:974:18)
+      at Test.postRun (node:internal/test_runner/test:1542:19)
+      at Test.run (node:internal/test_runner/test:1467:12)
+      at async startSubtestAfterBootstrap (node:internal/test_runner/harness:387:3) {
+    generatedMessage: false,
+    code: 'ERR_ASSERTION',
+    actual: null,
+    expected: true,
+    operator: '==',
+    diff: 'simple'
+  }
+
+
+REVISION 2 (user-approved): test/v2-balance.test.cjs bonus fixture corrected from 4.50 to 3.50 and amount from 5.5 to 4.5. The original fixture asserted 5.50 < 5 (false); the corrected fixture keeps the bonus-inclusive-low intent. New sha256: 99d11a80400a21fe9b529412db31fec6a8cab8dde239a996d43695ca1edea83b

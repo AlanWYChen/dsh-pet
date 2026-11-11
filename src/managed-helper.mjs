@@ -4,16 +4,21 @@ import { fileURLToPath } from 'node:url';
 
 const require = createRequire(import.meta.url);
 const mainPath = fileURLToPath(new URL('./main.cjs', import.meta.url));
+const { loadConfig, saveConfig } = require('./config.cjs');
 
 /** One DSH-owned Electron pet. Browser connections do not own its lifetime. */
 export class ManagedPet {
-  constructor({ url, spawn = spawnProcess, readyTimeout = 10_000, stopTimeout = 1_500 }) {
+  constructor({ url, spawn = spawnProcess, readyTimeout = 10_000, stopTimeout = 1_500, configFile } = {}) {
     const parsed = new URL(url);
     if (!['http:', 'https:'].includes(parsed.protocol)) throw new TypeError('Expected an HTTP(S) DSH URL');
     this.url = parsed.href;
     this.spawn = spawn;
     this.readyTimeout = readyTimeout;
     this.stopTimeout = stopTimeout;
+    // When omitted the helper keeps today's in-memory behavior: no disk I/O at all.
+    this.configFile = configFile || undefined;
+    this.config = null;
+    this.sound = true;
     this.enabled = false;
     this.running = false;
     this.error = undefined;
@@ -23,6 +28,45 @@ export class ManagedPet {
     this.stopping = new WeakSet();
     this.delivery = { lastState: null, sent: 0, received: 0 };
     this.debugMode = false;
+  }
+
+  readConfig() {
+    if (!this.configFile) return null;
+    try {
+      const config = loadConfig({ file: this.configFile });
+      this.config = config;
+      this.sound = config.sound;
+      return config;
+    } catch { return null; }
+  }
+
+  persist(patch) {
+    if (!this.configFile) return;
+    try {
+      const base = this.config || loadConfig({ file: this.configFile });
+      const next = saveConfig({ ...base, ...patch }, { file: this.configFile });
+      this.config = next;
+      this.sound = next.sound;
+    } catch { this.error = 'Pet configuration save failed'; }
+  }
+
+  /** Start the helper exactly once from the saved enabled state (host boot). */
+  async autoStart() {
+    const operation = this.queue.then(async () => {
+      if (this.disposed) return this.status();
+      if (!this.configFile) return this.status();
+      const config = this.readConfig();
+      if (!config || !config.enabled) {
+        if (!this.running) this.enabled = false;
+        return this.status();
+      }
+      this.enabled = true;
+      if (this.running) return this.status();
+      await this.start();
+      return this.status();
+    });
+    this.queue = operation.catch(() => {});
+    return operation;
   }
 
   status() {
@@ -46,10 +90,48 @@ export class ManagedPet {
     return this.debugStatus();
   }
 
+  /** Push a runtime setting to a running helper; a stopped pet just ignores it. */
+  sendConfig(patch) {
+    const child = this.child;
+    if (!this.running || !child?.connected) return false;
+    try {
+      child.send({ type: 'pet:config', ...patch }, error => {
+        if (error && this.child === child) this.error = 'Pet configuration send failed';
+      });
+      return true;
+    } catch { this.error = 'Pet configuration send failed'; return false; }
+  }
+
+  /** Persist the sound setting and apply it to the running helper immediately. */
+  setSound(enabled) {
+    if (typeof enabled !== 'boolean') throw new TypeError('Sound must be a boolean');
+    this.sound = enabled;
+    if (this.config) this.config = { ...this.config, sound: enabled };
+    if (this.configFile) this.persist({ sound: enabled });
+    this.sendConfig({ sound: enabled });
+    return { sound: enabled };
+  }
+
+  /** Persist the low-balance threshold used by the host-side watcher. */
+  setBalanceThreshold(threshold) {
+    if (!threshold || typeof threshold !== 'object' || Array.isArray(threshold)
+        || threshold.currency !== 'CNY' || !Number.isFinite(threshold.amount) || threshold.amount <= 0) {
+      throw new TypeError('Balance threshold must be a positive CNY amount');
+    }
+    const value = { currency: 'CNY', amount: threshold.amount };
+    if (this.config) this.config = { ...this.config, balanceThreshold: value };
+    if (this.configFile) this.persist({ balanceThreshold: value });
+    return { balanceThreshold: value };
+  }
+
   setEnabled(enabled) {
     const operation = this.queue.then(async () => {
       if (this.disposed) return this.status();
       this.enabled = Boolean(enabled);
+      if (this.configFile) {
+        this.readConfig();
+        this.persist({ enabled: this.enabled });
+      }
       if (this.enabled) await this.start();
       else { await this.stop(); this.error = undefined; }
       return this.status();
@@ -63,7 +145,12 @@ export class ManagedPet {
     if (this.child) await this.stop();
     this.error = undefined;
     try {
-      const env = { ...process.env, DSH_PET_MANAGED: '1', DSH_PET_URL: this.url, DSH_PET_DEBUG: this.debugMode ? '1' : '0' };
+      const config = this.configFile ? (this.config || this.readConfig()) : null;
+      const env = { ...process.env, DSH_PET_MANAGED: '1', DSH_PET_URL: this.url, DSH_PET_DEBUG: this.debugMode ? '1' : '0',
+        DSH_PET_SOUND: config && config.sound === false ? '0' : '1' };
+      if (config && config.position) {
+        env.DSH_PET_POSITION = JSON.stringify({ x: config.position.x, y: config.position.y });
+      }
       delete env.ELECTRON_RUN_AS_NODE;
       const child = this.spawn(require('electron'), [mainPath], { env, stdio: ['ignore', 'ignore', 'pipe', 'ipc'] });
       this.child = child;
@@ -74,8 +161,14 @@ export class ManagedPet {
         this.delivery.lastState = message.state;
         this.delivery.received++;
       };
+      const onPosition = message => {
+        if (this.child !== child || message?.type !== 'pet:position') return;
+        if (!Number.isFinite(message.x) || !Number.isFinite(message.y)) return;
+        this.persist({ position: { x: Math.round(message.x), y: Math.round(message.y) } });
+      };
       child.on('message', onState);
-      child.once('exit', () => child.off('message', onState));
+      child.on('message', onPosition);
+      child.once('exit', () => { child.off('message', onState); child.off('message', onPosition); });
       child.stderr?.resume();
       await new Promise((resolve, reject) => {
         let settled = false;
