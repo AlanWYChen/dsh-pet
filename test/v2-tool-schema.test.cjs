@@ -72,3 +72,10 @@ test('tool execute forwards the value to the balance operations', async () => {
   assert.equal(sound.sound, false);
   assert.deepEqual(calls.at(-1), ['sound', false]);
 });
+
+test('balance actions are not forced to return helper status fields', () => {
+  const { tool } = mountHost();
+  const required = tool.output.schema.required || [];
+  assert.equal(required.includes('enabled'), false, 'balance responses do not carry enabled');
+  assert.equal(required.includes('running'), false, 'balance responses do not carry running');
+});
