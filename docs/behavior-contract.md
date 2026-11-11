@@ -2,7 +2,8 @@
 
 Status: implemented in v0.2.0 and kept as the maintained behavior contract. The test suite is
 the executable source of truth; protected tests change only with explicit user approval. The
-frozen-test baselines and RED evidence from the rebuild live in [dev/tdd](dev/tdd/).
+frozen-test baselines from the rebuild live in [dev/tdd](dev/tdd/); the detailed RED output
+is retained in repository history.
 
 ## Product goal
 
@@ -113,7 +114,7 @@ Alerts: turn `completed`, `permission`, `error`, `max-tokens`, and `low-balance`
 README and the event table must describe: auto-start, persistent alerts, position memory,
 low-balance behavior, the native-notification limitation per OS, and that balance stays local.
 
-## Pre-agreed implementation seams (tests may rely on these)
+## Implementation seams (tests may rely on these)
 
 - New module `src/config.cjs` exports `DEFAULT_CONFIG`, `loadConfig(options?)`, and
   `saveConfig(config, options?)`, where `options.file` overrides the default
@@ -135,7 +136,7 @@ low-balance behavior, the native-notification limitation per OS, and that balanc
 - `index.mjs` tracks running root turns in a small pure helper (exported for tests) so the
   resume state can be tested without a live Electron process.
 
-## Increment 2 seams (balance + settings)
+## Balance and settings seams
 
 - New module `src/balance.mjs` (ESM) exports:
   - `ALERT_INTERVAL_MS` = 24 hours.
