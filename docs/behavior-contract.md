@@ -1,7 +1,8 @@
-# dsh-pet v2 — behavior contract
+# dsh-desktop-pet behavior contract
 
-Status: requirements for the rebuild. The existing test suite is protected and must not be
-modified, weakened, or skipped. New behavior is added by new tests only.
+Status: implemented in v0.2.0 and kept as the maintained behavior contract. The test suite is
+the executable source of truth; protected tests change only with explicit user approval. The
+frozen-test baselines and RED evidence from the rebuild live in [dev/tdd](dev/tdd/).
 
 ## Product goal
 
@@ -171,7 +172,7 @@ low-balance behavior, the native-notification limitation per OS, and that balanc
   can find them without depending on layout. Dictionary keys added: `balance`, `threshold`,
   `sound`, `testNotification`, `balanceUnavailable`.
 
-## Out of scope for v2
+## Out of scope
 
 - Session-specific deep links.
 - Signed/notarized installers for each OS (document the path instead).

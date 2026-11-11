@@ -121,7 +121,7 @@
     }
   ],
   "packageJson": {
-    "sha256": "0a9304e8e4465a4fdef6f1ad3bf6431a5684c86bdbb2103cf09f7e5a952738c6",
+    "sha256": "467a7e15125e1bdaf54789fd7229dc679c8fe5dc10ecf8bfc8a44958f8581ea5",
     "testScript": "node --test test/*.test.cjs"
   },
   "scaffolds": [
@@ -138,7 +138,7 @@
       "sha256": "008fbc9bd551fcc984c6464a4c59594cc0ed8c5665e186e811a254d7835ab49d"
     }
   ],
-  "revision": 7,
-  "revisedAt": "2026-11-11T01:22:51.502Z",
-  "revisionNote": "User-approved frozen-test correction (test/v2-balance.test.cjs): bonus fixture 4.50->3.50 and amount 5.5->4.5 so the bonus-inclusive low case is logically consistent (< 5 CNY). No production behavior changed for this correction. | Added test/v2-tool-schema.test.cjs (agent tool value payload); RED recorded in docs/v2-tool-schema-red.txt. | Added test/plugin-meta.test.cjs for the dsh-desktop-pet registration name and supplied tail icon. | User-approved Settings-tab rename to Desktop Pet / 桌面宠物 with the tail nav icon, and npm package id rename to dsh-desktop-pet. | User-approved white tail icon and native DSH settings control styling. | Tool output schema no longer requires helper status on balance actions (regression test added)."
+  "revision": 8,
+  "revisedAt": "2026-11-11T01:27:06.530Z",
+  "revisionNote": "User-approved frozen-test correction (test/v2-balance.test.cjs): bonus fixture 4.50->3.50 and amount 5.5->4.5 so the bonus-inclusive low case is logically consistent (< 5 CNY). No production behavior changed for this correction. | Added test/v2-tool-schema.test.cjs (agent tool value payload); RED recorded during development (not retained in the tree). | Added test/plugin-meta.test.cjs for the dsh-desktop-pet registration name and supplied tail icon. | User-approved Settings-tab rename to Desktop Pet / 桌面宠物 with the tail nav icon, and npm package id rename to dsh-desktop-pet. | User-approved white tail icon and native DSH settings control styling. | Tool output schema no longer requires helper status on balance actions (regression test added). | Housekeeping: docs reorganized; package files list now ships scripts; package.json hash refreshed (test script unchanged)."
 }

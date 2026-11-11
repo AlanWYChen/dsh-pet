@@ -1,25 +1,15 @@
-// Event mapping is shared by the managed bundle and tests.
+// Shared event mapping for the managed bundle and its tests.
 
 /**
- * Legacy entry plus shared event mapping. Runtime ownership now lives in index.mjs.
- * Historical setup notes below apply only to the former standalone bridge.
- * Add this row to ~/.dsh/profiles/web/cordis.patch.yml (not cordis.yml):
+ * Session-event mapping and the pending-approval dispatcher. Runtime lifecycle
+ * lives in index.mjs; the apply() below is an inert compatibility tombstone for
+ * the former absolute-path profile row.
  *
- * - insert:
- *     - id: desktop-pet-notifications
- *       name: /absolute/path/to/dsh-plugin.mjs
- *
- * Web profile HMR normally loads the patch; otherwise restart DSH.
- * The desktop bridge writes ~/.dsh-pet/bridge.json: {"port":12345,"token":"..."}.
- * Requests go only to http://127.0.0.1:<port>/event with Authorization: Bearer.
- * Never copy the token into profile configuration or logs. No prompt, assistant
- * response, tool arguments, or session title is read or transmitted.
- *
- * Verified against installed DSH: session/event(session,event), turn/start,
- * turn/end {turn,reason:{kind}}. Only kind=completed produces done. Aborted or
- * blocked turns produce sleeping, errors produce error, max-tokens hungry. Synthetic
- * interrupted/forked closers are not successful completion notifications.
- * Child sessions are ignored to avoid duplicate notifications from subagents.
+ * Verified against the installed DSH: session/event(session, event), turn/start,
+ * and turn/end { turn, reason: { kind } }. Only completed produces a reply-ready
+ * alert; aborted, blocked, interrupted, and forked turns rest; errors alert; and
+ * max-tokens asks for rice. Turn events carry no prompt, answer, tool argument,
+ * or session title. Delegated subagents are ignored to avoid duplicate alerts.
  */
 export const name = 'desktop-pet-notifications';
 
