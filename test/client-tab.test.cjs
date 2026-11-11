@@ -48,13 +48,21 @@ function registerClient(initialLanguage = 'en') {
 for (const language of ['en', 'zh']) {
   test(`desktop pet owns a localized Settings tab in ${language}, not a General row`, () => {
     const { registrations, injections, dictionaries } = registerClient(language);
-    assert.equal(registrations.length, 1, 'Pet should contribute exactly its own settings page');
-    const { options, component } = registrations[0];
+    assert.equal(registrations.length, 2, 'the pet contributes its settings page and its navigation icon');
+    const section = registrations.find(({ options: entry }) => entry.name === 'settings.section');
+    assert.ok(section, 'the pet contributes a Settings section');
+    const { options, component } = section;
     assert.equal(options.name, 'settings.section', 'Pet belongs beside other Settings tabs, not inside General');
     assert.equal(options.id, 'deepseek-desktop-pet', 'Pet retains its stable, feature-owned registration id');
     assert.equal(typeof component, 'function', 'Settings page needs its own component');
     assert.ok(injections.includes('settings.section'), 'Registration must be owned by the Settings section slot');
+    assert.ok(injections.includes('settings.section.icon'), 'The pet contributes a navigation icon for its own section');
     assert.ok(!injections.includes('settings.general.item'), 'General preference-row registration must be removed');
+    const icon = registrations.find(({ options: entry }) => entry.name === 'settings.section.icon');
+    assert.ok(icon, 'the pet needs a navigation icon registration');
+    assert.equal(icon.options.id, options.id, 'the icon id must match the section id');
+    assert.equal(typeof icon.component, 'function', 'the navigation icon needs a component');
+    assert.equal(icon.options.order, options.order, 'the icon keeps the section order');
     assert.ok(!registrations.some(({ options: entry }) => entry.name === 'settings.general.item'));
     const label = typeof options.label === 'function' ? options.label() : options.label;
     assert.equal(typeof label, 'string');
@@ -76,5 +84,5 @@ test('Settings tab label follows a locale switch without re-registering the page
   assert.equal(english, client.dictionaries.get('desktop-pet:en').title);
   assert.equal(chinese, client.dictionaries.get('desktop-pet:zh').title);
   assert.notEqual(chinese, english, 'English and Chinese tabs should have localized names');
-  assert.equal(client.registrations.length, 1, 'Locale changes must not duplicate Settings pages');
+  assert.equal(client.registrations.length, 2, 'Locale changes must not duplicate Settings pages or icons');
 });

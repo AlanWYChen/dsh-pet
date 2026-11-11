@@ -34,3 +34,15 @@ test('the tail icon is a bounded square transparent PNG', () => {
   assert.ok(width >= 128, 'the icon must be large enough to scale down cleanly');
   assert.equal(colorType, 6, 'the icon must carry an alpha channel (RGBA)');
 });
+
+test('the npm package id and bundle patch are renamed to dsh-desktop-pet', () => {
+  assert.equal(manifest.name, 'dsh-desktop-pet');
+  const patch = fs.readFileSync(path.join(root, 'cordis.patch.yml'), 'utf8');
+  assert.match(patch, /name: dsh-desktop-pet/);
+  assert.doesNotMatch(patch, /name: deepseek-pet/);
+  const client = fs.readFileSync(path.join(root, 'client.js'), 'utf8');
+  assert.match(client, /id: 'dsh-desktop-pet'/, 'the client module id follows the package id');
+  const lock = JSON.parse(fs.readFileSync(path.join(root, 'package-lock.json'), 'utf8'));
+  assert.equal(lock.name, 'dsh-desktop-pet');
+  assert.equal(lock.packages[''].name, 'dsh-desktop-pet');
+});

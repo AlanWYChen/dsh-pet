@@ -1,5 +1,5 @@
 {
-  "name": "deepseek-pet",
+  "name": "dsh-desktop-pet",
   "version": "0.2.0",
   "icon": "./icon.png",
   "exports": { ".": "./index.mjs", "./client": "./client.js", "./locale/*.json": "./locale/*.json", "./icon": "./icon.png" },

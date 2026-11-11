@@ -150,7 +150,7 @@ function debugSetting(language, debugMode) {
   definition.factory(() => React).apply({ effect: callback => callback(), locale: {
     register(namespace, locale, value) { dictionaries.set(`${namespace}:${locale}`, value); return () => {}; },
     bind: namespace => key => dictionaries.get(`${namespace}:${language}`)?.[key] ?? key,
-  }, slots: { inject: (_name, callback) => callback(), register(_options, value) { component = value; return () => {}; } } });
+  }, slots: { inject: (_name, callback) => callback(), register(options, value) { if (options.name === 'settings.section') component = value; return () => {}; } } });
   const root = component();
   function walk(node) { if (!node || typeof node !== 'object') return []; if (Array.isArray(node)) return node.flatMap(walk); return [node, ...(node.children || []).flatMap(walk)]; }
   return { nodes: walk(root), requests };

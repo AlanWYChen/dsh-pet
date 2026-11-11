@@ -25,7 +25,7 @@ function setting(language, running) {
       register(namespace, locale, dictionary) { dictionaries.set(`${namespace}:${locale}`, dictionary); return () => {}; },
       bind(namespace) { return key => dictionaries.get(`${namespace}:${language}`)?.[key] ?? key; },
     },
-    slots: { inject(_slot, callback) { return callback(); }, register(options, component) { registration = { options, component }; return () => {}; } },
+    slots: { inject(_slot, callback) { return callback(); }, register(options, component) { if (options.name === 'settings.section') registration = { options, component }; return () => {}; } },
   });
   const root = registration.component();
   function walk(node) {

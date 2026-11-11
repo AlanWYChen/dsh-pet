@@ -4,9 +4,9 @@ const fs = require('node:fs');
 const path = require('node:path');
 const vm = require('node:vm');
 
-for (const [language, expected] of [['en', 'Pet'], ['zh', '大肥鱼']]) {
+for (const [language, expected] of [['en', 'Desktop Pet'], ['zh', '桌面宠物']]) {
   test(`pet tab and settings heading use exact ${language} name ${expected}`, () => {
-    let definition, registration;
+    let definition, section, icon;
     const dictionaries = new Map();
     const elements = [];
     const React = {
@@ -30,15 +30,24 @@ for (const [language, expected] of [['en', 'Pet'], ['zh', '大肥鱼']]) {
       },
       slots: {
         inject(_slot, callback) { return callback(); },
-        register(options, component) { registration = { options, component }; return () => {}; },
+        register(options, component) { if (options.name === 'settings.section') section = { options, component }; else if (options.name === 'settings.section.icon') icon = { options, component }; return () => {}; },
       },
     });
     assert.equal(dictionaries.get(`desktop-pet:${language}`).title, expected, 'localized title is the exact user-requested name');
-    const label = registration.options.label;
+    assert.ok(section, 'the settings section must be registered');
+    const label = section.options.label;
     assert.equal(typeof label === 'function' ? label() : label, expected, 'Settings tab displays exact requested name');
     // Inspect component output values only, with effects inert; no DOM/browser,
     // fetch, native helper or style/layout emulation is involved.
-    registration.component();
+    section.component();
     assert.ok(elements.some(element => element.type === 'div' && element.children.length === 1 && element.children[0] === expected), 'settings heading displays the same exact name');
+    assert.ok(icon, 'the Settings tab contributes a navigation icon');
+    assert.equal(icon.options.id, section.options.id, 'the icon id must match the section id');
+    const rendered = icon.component({ size: 20, active: true });
+    assert.equal(rendered.type, 'img');
+    assert.ok(rendered.props.src.startsWith('data:image/png;base64,'), 'the supplied tail icon is embedded for the client');
+    assert.equal(rendered.props.width, 20);
+    assert.equal(rendered.props.height, 20);
+    assert.equal(rendered.props['aria-hidden'], 'true');
   });
 }

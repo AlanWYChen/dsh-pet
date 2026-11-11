@@ -13,7 +13,7 @@
     },
     {
       "file": "test/client-tab.test.cjs",
-      "sha256": "c123a0b391166491cfe9a297f79596d1c067e97e3498a2f7a722448fd5dcfbbb"
+      "sha256": "37bdc88276b81d100bc19d765a64f6557931e257f6258f1711ecd873eecd21c6"
     },
     {
       "file": "test/compact-bubble.test.cjs",
@@ -21,7 +21,7 @@
     },
     {
       "file": "test/debug-mode.test.cjs",
-      "sha256": "a3e9f74856e6129dc42a9183dd088e7322b7b6bb0cf9e0b70ffdd40b3c1afb17"
+      "sha256": "7c6d6259cbbce3009601ac07bded9136984832ed1e1af412d306bade2ceba6dd"
     },
     {
       "file": "test/debug-validation.test.cjs",
@@ -41,7 +41,7 @@
     },
     {
       "file": "test/pet-name.test.cjs",
-      "sha256": "79a6dc02ca2dd07324c161f7520d7d6ea367df8a002a62b1cef7648bca1949e3"
+      "sha256": "58383e5c1e54e36bf2fc151efae49ecc22a69a366671a60ea16fa437899637ec"
     },
     {
       "file": "test/pet.test.cjs",
@@ -49,7 +49,7 @@
     },
     {
       "file": "test/plugin-meta.test.cjs",
-      "sha256": "3aa2e51116cf30e68829474b220f08d145737f626e0240763547c5c1427ffca7"
+      "sha256": "f0bbbdd88bf7d9c729d7cb603958b48908dd4cdde516e56fc2349b32069ac3f7"
     },
     {
       "file": "test/pointer-drag.test.cjs",
@@ -65,7 +65,7 @@
     },
     {
       "file": "test/settings-actions.test.cjs",
-      "sha256": "c2bc4adb5fe3f1a523a024de430f6281e9a4af08b190aa0e94c99a693a6968b2"
+      "sha256": "3eddf7118ef3e74deff4f679b2a263caec137c33fab3604ea416040f90be9cb2"
     },
     {
       "file": "test/v2-balance-api.test.cjs",
@@ -109,7 +109,7 @@
     },
     {
       "file": "test/v2-settings-balance.test.cjs",
-      "sha256": "fbb3f639e9ea8e346bc94272bd44a35f358ced3137d09abc4766a7fa1f481385"
+      "sha256": "773feca7b0b2dbbfba676c605755a5e3e1cb4abf55bb2f04b2b028fcbe04805f"
     },
     {
       "file": "test/v2-tool-schema.test.cjs",
@@ -138,7 +138,7 @@
       "sha256": "008fbc9bd551fcc984c6464a4c59594cc0ed8c5665e186e811a254d7835ab49d"
     }
   ],
-  "revision": 4,
-  "revisedAt": "2026-11-11T01:11:19.755Z",
-  "revisionNote": "User-approved frozen-test correction (test/v2-balance.test.cjs): bonus fixture 4.50->3.50 and amount 5.5->4.5 so the bonus-inclusive low case is logically consistent (< 5 CNY). No production behavior changed for this correction. | Added test/v2-tool-schema.test.cjs (agent tool value payload); RED recorded in docs/v2-tool-schema-red.txt. | Added test/plugin-meta.test.cjs for the dsh-desktop-pet registration name and supplied tail icon."
+  "revision": 5,
+  "revisedAt": "2026-11-11T01:16:54.193Z",
+  "revisionNote": "User-approved frozen-test correction (test/v2-balance.test.cjs): bonus fixture 4.50->3.50 and amount 5.5->4.5 so the bonus-inclusive low case is logically consistent (< 5 CNY). No production behavior changed for this correction. | Added test/v2-tool-schema.test.cjs (agent tool value payload); RED recorded in docs/v2-tool-schema-red.txt. | Added test/plugin-meta.test.cjs for the dsh-desktop-pet registration name and supplied tail icon. | User-approved Settings-tab rename to Desktop Pet / 桌面宠物 with the tail nav icon, and npm package id rename to dsh-desktop-pet."
 }

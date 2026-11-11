@@ -46,7 +46,7 @@ function mountClient(language = 'en') {
     },
     slots: {
       inject(slot, callback) { return callback(); },
-      register(options, value) { component = value; return () => {}; },
+      register(options, value) { if (options.name === 'settings.section') component = value; return () => {}; },
     },
   };
   client.apply(ctx);
