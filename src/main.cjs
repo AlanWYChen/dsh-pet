@@ -43,7 +43,9 @@ const configDir = path.join(os.homedir(), '.dsh-pet');
 const configPath = path.join(configDir, 'bridge.json');
 
 // A saved position is honoured only while a meaningful part of the window still
-// overlaps a connected display's work area. Anything else opens bottom-right.
+// overlaps a connected display. Placement measures against the display's full
+// bounds (the macOS menu-bar strip included) so a pet may legitimately live above
+// the menu bar; display objects that expose no bounds fall back to their work area.
 function savedPosition() {
   const raw = process.env.DSH_PET_POSITION;
   if (typeof raw !== 'string' || !raw) return null;
@@ -53,24 +55,37 @@ function savedPosition() {
   if (!Number.isFinite(value.x) || !Number.isFinite(value.y)) return null;
   return { x: Math.round(value.x), y: Math.round(value.y) };
 }
-function workAreas() {
+function displayAreas() {
+  const areas = [];
   try {
     const displays = screen.getAllDisplays?.();
-    if (Array.isArray(displays) && displays.length) {
-      return displays.map(display => display?.workArea).filter(Boolean);
+    if (Array.isArray(displays)) {
+      for (const display of displays) {
+        const area = display?.bounds ?? display?.workArea;
+        if (area) areas.push(area);
+      }
     }
   } catch {}
-  try {
-    const primary = screen.getPrimaryDisplay?.();
-    if (primary?.workArea) return [primary.workArea];
-  } catch {}
-  return [];
+  if (!areas.length) {
+    try {
+      const primary = screen.getPrimaryDisplay?.();
+      const area = primary?.bounds ?? primary?.workArea;
+      if (area) areas.push(area);
+    } catch {}
+  }
+  return areas;
+}
+// How much of the pet window, placed at `position`, overlaps one display rect.
+// Negative values mean the window sits entirely outside that rect on the axis.
+function overlap(position, area) {
+  return {
+    horizontal: Math.min(position.x + WINDOW_WIDTH, area.x + area.width) - Math.max(position.x, area.x),
+    vertical: Math.min(position.y + WINDOW_HEIGHT, area.y + area.height) - Math.max(position.y, area.y),
+  };
 }
 function visibleOnDisplay(position) {
-  return workAreas().some(area => {
-    if (!area) return false;
-    const horizontal = Math.min(position.x + WINDOW_WIDTH, area.x + area.width) - Math.max(position.x, area.x);
-    const vertical = Math.min(position.y + WINDOW_HEIGHT, area.y + area.height) - Math.max(position.y, area.y);
+  return displayAreas().some(area => {
+    const { horizontal, vertical } = overlap(position, area);
     return horizontal >= VISIBLE_MARGIN && vertical >= VISIBLE_MARGIN;
   });
 }
@@ -82,6 +97,50 @@ function startPosition(area) {
   const saved = savedPosition();
   return saved && visibleOnDisplay(saved) ? saved : fallback;
 }
+// The minimal shift that leaves exactly VISIBLE_MARGIN pt of `size` inside the
+// display span [start, start + extent]: either the window pokes out on the near
+// side (move it in from the left/top) or on the far side (move it in from the
+// right/bottom). Existing overlap is preserved on the other axis.
+function clampAxis(value, size, start, extent) {
+  if (value < start) return start - size + VISIBLE_MARGIN;
+  return start + extent - VISIBLE_MARGIN;
+}
+// Drag-end reachability guard. The pet may be dragged above the menu bar, but at
+// least VISIBLE_MARGIN pt of width and height must remain inside the display whose
+// bounds it intersects most (the primary display when it intersects none). Fewer
+// than that is corrected with the smallest possible move. Exactly VISIBLE_MARGIN
+// is allowed, and an already-reachable window is never moved. This runs only from
+// the debounced drag-end handler so it cannot fight an in-progress drag.
+function keepWindowReachable() {
+  if (!win || (typeof win.isDestroyed === 'function' && win.isDestroyed())) return;
+  let bounds;
+  try { bounds = win.getBounds?.(); } catch {}
+  if (!bounds || !Number.isFinite(bounds.x) || !Number.isFinite(bounds.y)) return;
+  const areas = displayAreas();
+  if (!areas.length) return;
+  let target = areas[0];
+  let strongest = 0;
+  for (const area of areas) {
+    const { horizontal, vertical } = overlap(bounds, area);
+    if (horizontal <= 0 || vertical <= 0) continue;
+    const shared = horizontal * vertical;
+    if (shared > strongest) { strongest = shared; target = area; }
+  }
+  if (strongest === 0) {
+    try {
+      const primary = screen.getPrimaryDisplay?.();
+      const area = primary?.bounds ?? primary?.workArea;
+      if (area) target = area;
+    } catch {}
+  }
+  const { horizontal, vertical } = overlap(bounds, target);
+  if (horizontal >= VISIBLE_MARGIN && vertical >= VISIBLE_MARGIN) return;
+  const next = { x: bounds.x, y: bounds.y };
+  if (horizontal < VISIBLE_MARGIN) next.x = clampAxis(bounds.x, WINDOW_WIDTH, target.x, target.width);
+  if (vertical < VISIBLE_MARGIN) next.y = clampAxis(bounds.y, WINDOW_HEIGHT, target.y, target.height);
+  if (next.x === bounds.x && next.y === bounds.y) return;
+  try { win.setPosition?.(next.x, next.y); } catch {}
+}
 function reportPosition() {
   if (!managed || !win || win.isDestroyed?.() || !process.connected || typeof process.send !== 'function') return;
   let bounds;
@@ -92,10 +151,16 @@ function reportPosition() {
   } catch {}
 }
 // One debounced report per finished drag; a burst of native move events cannot
-// corrupt the persisted config.
+// corrupt the persisted config. The reachability guard runs here (and in every
+// mode, not only the managed one) so the corrected position is what gets reported
+// and persisted when a drag parks the pet off every display.
+function handleDragEnd() {
+  keepWindowReachable();
+  reportPosition();
+}
 function schedulePositionReport() {
   clearTimeout(positionTimer);
-  positionTimer = setTimeout(reportPosition, 250);
+  positionTimer = setTimeout(handleDragEnd, 250);
 }
 
 function publish(event) {
@@ -104,8 +169,10 @@ function publish(event) {
 function raiseAlertWindow() {
   if (!win || win.isDestroyed?.()) return;
   // Surface without stealing keyboard focus; every call is optional for the
-  // oldest minimal Electron fakes and for non-macOS windowing.
-  try { win.setAlwaysOnTop?.(true); } catch {}
+  // oldest minimal Electron fakes and for non-macOS windowing. The explicit
+  // 'status' level (25) keeps alerts above the macOS menu bar; a bare
+  // setAlwaysOnTop(true) would downgrade to 'floating' (3) behind it.
+  try { win.setAlwaysOnTop?.(true, 'status'); } catch {}
   try { win.showInactive?.(); } catch {}
   try { win.moveTop?.(); } catch {}
 }
@@ -172,7 +239,13 @@ else {
     const start = startPosition(area);
     win = new BrowserWindow({ width: WINDOW_WIDTH, height: WINDOW_HEIGHT, x: start.x, y: start.y,
       frame: false, transparent: true, resizable: false, alwaysOnTop: true, hasShadow: false,
+      // macOS: without this Electron's constrainFrameRect keeps a frameless window
+      // inside the work area, so the pet could not be placed above the menu bar.
+      enableLargerThanScreen: true,
       webPreferences: { preload: path.join(__dirname, 'preload.cjs'), contextIsolation: true, nodeIntegration: false, sandbox: true } });
+    // Drop the window at the 'status' level (25) so it floats above the menu bar
+    // (NSMainMenuWindowLevel is 24). Guarded for minimal Electron window fakes.
+    try { win.setAlwaysOnTop?.(true, 'status'); } catch {}
     win.setVisibleOnAllWorkspaces(true, { visibleOnFullScreen: true });
     win.webContents.setWindowOpenHandler(() => ({ action: 'deny' }));
     win.webContents.on('will-navigate', event => event.preventDefault());

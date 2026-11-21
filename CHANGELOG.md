@@ -1,5 +1,12 @@
 # Changelog
 
+## Unreleased
+
+- macOS: the pet can be dragged above the menu bar and stays drawn above it (frameless window
+  with `enableLargerThanScreen` at the `status` window level); alerts no longer drop it back
+  behind the bar. Position memory accepts above-the-bar positions, and a drag that would leave
+  the pet unreachable is pulled back so at least 48 pt stay inside a connected display.
+
 ## 0.2.0
 
 - Persistent desktop presence: the enabled state and window position are saved and restored;

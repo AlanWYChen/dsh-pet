@@ -1,0 +1,176 @@
+{
+  "increment": 3,
+  "created": "2026-11-21T00:21:06.681Z",
+  "command": "npm test",
+  "protectedTests": [
+    {
+      "file": "test/active-artwork.test.cjs",
+      "sha256": "0af5da8427d83af606699168bbb06c7d94ff4332c911b95033f887f42ebe7a88"
+    },
+    {
+      "file": "test/active-thinking.test.cjs",
+      "sha256": "ab6b4ced5a0fb2c02fe889e08bcb215928b859e8fbfa88128b418ebe907e9ed8"
+    },
+    {
+      "file": "test/client-tab.test.cjs",
+      "sha256": "37bdc88276b81d100bc19d765a64f6557931e257f6258f1711ecd873eecd21c6"
+    },
+    {
+      "file": "test/compact-bubble.test.cjs",
+      "sha256": "742077130b10a2bf1a8dd72519ecd51417fac7fbd68415fed23d4e048696b5d5"
+    },
+    {
+      "file": "test/debug-mode.test.cjs",
+      "sha256": "7c6d6259cbbce3009601ac07bded9136984832ed1e1af412d306bade2ceba6dd"
+    },
+    {
+      "file": "test/debug-validation.test.cjs",
+      "sha256": "fd6c112a5729ecd12f02a28e04f1079851e1852f772856e008edb81b74d01ad6"
+    },
+    {
+      "file": "test/event-audit.test.cjs",
+      "sha256": "02c3920caf244e51786aeacf52078280f4708ce787718bef9c6c93f7c270d731"
+    },
+    {
+      "file": "test/event-diagnostics.test.cjs",
+      "sha256": "9b95c816aee923958846bc8a2ee2f06eddc11450ee70bcf1ccd61bafa45aefe0"
+    },
+    {
+      "file": "test/managed-helper.test.cjs",
+      "sha256": "13528fa0c34805ad454bf6ed86aec95c76f38a1a1ef9096e8f1dd8c6a8297f63"
+    },
+    {
+      "file": "test/pet-name.test.cjs",
+      "sha256": "3a57cc707f75ee2b704844f614e5a84a116c372bd78e58b50e2f636af3fa02ed"
+    },
+    {
+      "file": "test/pet.test.cjs",
+      "sha256": "e00aa775151e75d4d78fd9ba51afbe4fb6fb7cbb1344fd1f17c19ae7acd06d67"
+    },
+    {
+      "file": "test/plugin-meta.test.cjs",
+      "sha256": "f0bbbdd88bf7d9c729d7cb603958b48908dd4cdde516e56fc2349b32069ac3f7"
+    },
+    {
+      "file": "test/pointer-drag.test.cjs",
+      "sha256": "6b25212f126e8e996adadf622ac2dc5dca62a2ca0d606c5df1c53466ab96bfdc"
+    },
+    {
+      "file": "test/renderer-global.test.cjs",
+      "sha256": "b9716691c8bf63b61734e80eb93f4ba5b917c3f14f6d436c232b232ca5bdba1b"
+    },
+    {
+      "file": "test/setting-transport.test.cjs",
+      "sha256": "41caea74487e664e827f99a1eb54777c761304bc3350fe8c43c562079ccbbfb8"
+    },
+    {
+      "file": "test/settings-actions.test.cjs",
+      "sha256": "3eddf7118ef3e74deff4f679b2a263caec137c33fab3604ea416040f90be9cb2"
+    },
+    {
+      "file": "test/v2-balance-api.test.cjs",
+      "sha256": "14f9dea0913c5d56db8f8ce246ab6be7e13dc360fbb0820c0155be7f22a543ef"
+    },
+    {
+      "file": "test/v2-balance-direct.test.cjs",
+      "sha256": "d39ec051e348b4b36c13be8180c953fb76b673c0cb7d183b1f911bd307a9758f"
+    },
+    {
+      "file": "test/v2-balance-host.test.cjs",
+      "sha256": "bff24df77cc14109363f140b70a16f9858d806e1fc96a80467266ee88fb5ccf5"
+    },
+    {
+      "file": "test/v2-balance-reason.test.cjs",
+      "sha256": "6f9e657a25ab518c5709be34352acc12e043a57fe6fd631e1465b157e53feb91"
+    },
+    {
+      "file": "test/v2-balance-refresh.test.cjs",
+      "sha256": "b8354358777ce1f3d20f669f98fec487fa22541105bd54341d59b3a0236cd41d"
+    },
+    {
+      "file": "test/v2-balance-watcher.test.cjs",
+      "sha256": "d8b881ce8d74f727b97a0d118ea2eafece3d5d347c9ece0c18458773949bd5cd"
+    },
+    {
+      "file": "test/v2-balance.test.cjs",
+      "sha256": "99d11a80400a21fe9b529412db31fec6a8cab8dde239a996d43695ca1edea83b"
+    },
+    {
+      "file": "test/v2-config.test.cjs",
+      "sha256": "8fd46466537661169ae448847ed1d35438b3846395e7e6d2430d3755e71a462a"
+    },
+    {
+      "file": "test/v2-main-alerts.test.cjs",
+      "sha256": "96446d004d0f6b1223111b6b3098976bd7145308d9ec7422464dc8246b79db32"
+    },
+    {
+      "file": "test/v2-main-sound.test.cjs",
+      "sha256": "0391243bbcb105d377be1905ca0531e8087f094d40cecbd1844fad72d2fdce9c"
+    },
+    {
+      "file": "test/v2-managed-persist.test.cjs",
+      "sha256": "581c93d09403c44d998fcf51dbeb344f65aeeb1679d627b7af03bfd9ca976a60"
+    },
+    {
+      "file": "test/v2-renderer-alerts.test.cjs",
+      "sha256": "0cd6a7d71a61f49718744517f35104b5e96147905c766b98863f62d447779267"
+    },
+    {
+      "file": "test/v2-resume.test.cjs",
+      "sha256": "b01ab79d94ff0fd1fad9200e63d0f1a2a6406778bbac250fe05741d75b21c88c"
+    },
+    {
+      "file": "test/v2-settings-balance.test.cjs",
+      "sha256": "773feca7b0b2dbbfba676c605755a5e3e1cb4abf55bb2f04b2b028fcbe04805f"
+    },
+    {
+      "file": "test/v2-tool-schema.test.cjs",
+      "sha256": "453ecacf698cb6b876b6d2c287d32f98c633334e8ec5f267ade3f1c0a31cc9bd"
+    },
+    {
+      "file": "test/window-above-menubar.test.cjs",
+      "sha256": "6fbf0f230469bf5250586746893efb1a437f6f5d1ea8d936247d613b0a419549"
+    },
+    {
+      "file": "test/window-position.test.cjs",
+      "sha256": "d11cc2b382dfc2fad29c59b29fb6d70b594ae74d39e3c55b1a853f034edff4e9"
+    }
+  ],
+  "packageJson": {
+    "sha256": "467a7e15125e1bdaf54789fd7229dc679c8fe5dc10ecf8bfc8a44958f8581ea5",
+    "testScript": "node --test test/*.test.cjs"
+  },
+  "scaffolds": [
+    {
+      "file": "src/main.cjs",
+      "sha256": "c72bd6f02f5fffdf33d1dbcc41fb1f070ecabf72170224e4c3de3f46439c5cb6"
+    }
+  ],
+  "redCommand": "node --test test/window-above-menubar.test.cjs",
+  "redResult": {
+    "newTests": {
+      "tests": 14,
+      "pass": 6,
+      "fail": 8
+    },
+    "failingTests": [
+      "the pet window opts into living above the macOS menu bar",
+      "the pet window is raised to the status level above the menu bar at startup",
+      "an alert keeps the status level instead of dropping the pet behind the menu bar",
+      "a saved position above the menu bar is restored verbatim",
+      "saved-position validation uses full bounds and falls back to workArea only when a display lacks bounds",
+      "a drag off every display is pulled back by the minimal margin and the corrected position is reported",
+      "47 pt of the pet visible after a drag is clamped by the minimal margin",
+      "the drag guard also applies in unmanaged mode"
+    ],
+    "summary": "The 8 failing assertions exist because the pre-change src/main.cjs lacks all four new behaviors: enableLargerThanScreen is undefined, no setAlwaysOnTop(true, 'status') at startup or in raiseAlertWindow (a bare setAlwaysOnTop(true) downgrades to 'floating'), saved-position validation only measures workArea (so saved y=-200 is rejected), and the debounced drag-end handler only reports position without a full-bounds minimal-clamp reachability guard. The 6 passing new tests are regression guards that must stay green (48 pt boundary, full-bounds-reachable above-bar position, multi-display reachability, guarded no-ops for minimal/missing APIs, and R5 default placement + IPC surface).",
+    "preExistingSuite": {
+      "command": "npm test before the new file was added",
+      "tests": 149,
+      "pass": 149,
+      "fail": 0
+    }
+  },
+  "revision": 1,
+  "revisionNote": "Increment 3 test-author handoff. New protected acceptance test test/window-above-menubar.test.cjs (14 tests: 8 genuine RED against the pre-change src/main.cjs, 6 passing regression guards). No production behavior changed in this phase; the src/main.cjs sha256 is the PRE-change scaffold hash, frozen only as RED evidence, and is expected to change during implementation. Requirement set: user-approved Option A, pet may live above the macOS menu bar (R1 enableLargerThanScreen, R2 setAlwaysOnTop(true, 'status') at creation and in raiseAlertWindow, R3 saved-position validation against FULL display bounds with workArea fallback when a display has no bounds, R4 debounced drag-end reachability guard with VISIBLE_MARGIN = 48 pt minimal clamp against the most-intersecting display / primary when none intersect, R5 unchanged default and off-screen placement and IPC surface)."
+}

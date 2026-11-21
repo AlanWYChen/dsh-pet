@@ -17,7 +17,7 @@ Built with Electron, with bilingual English/Chinese messages. The companion belo
 - **Alerts** when a reply is ready, a permission is waiting, or a turn fails. Alerts stay visible until you dismiss them.
 - **Warns you before you run dry** when your DeepSeek account balance falls below the configurable threshold (¥5 by default), showing the actual amount.
 - **Asks for rice** when a turn hits its token limit.
-- **Moves with you:** drag the character to reposition it; the position is remembered for the next start.
+- **Moves with you:** drag the character to reposition it; the position is remembered for the next start. On macOS the pet can be parked above the menu bar, and a drag that would leave it unreachable is pulled back into a display.
 - **Stays with its Host:** closing a browser tab leaves it running; the pet you enabled comes back automatically with the next DSH host.
 
 ## Requirements
@@ -38,13 +38,13 @@ npm ci
 
 In DSH's **Plugin Manager**, install the cloned directory as a **local bundle**. Then open **Settings → Desktop Pet / 桌面宠物** and click **Start**. Click **Stop** to dismiss it. You can also ask the DSH agent to start or stop the pet through its `desktop_pet` tool.
 
-Bundle installation is profile-wide, but each running Host owns its own helper and private IPC channel. The enabled state is written immediately to `~/.dsh-pet/pet.json` (mode 0600), so a pet you started **returns automatically with the next DSH host**. A first run with no saved state starts **stopped** until you click Start. The window position is saved too; a saved position that no longer touches a connected display falls back to the bottom-right corner.
+Bundle installation is profile-wide, but each running Host owns its own helper and private IPC channel. The enabled state is written immediately to `~/.dsh-pet/pet.json` (mode 0600), so a pet you started **returns automatically with the next DSH host**. A first run with no saved state starts **stopped** until you click Start. The window position is saved too; a saved position that no longer touches a connected display falls back to the bottom-right corner. On macOS a saved position may sit above the menu bar.
 
 ### Everyday controls
 
 | Action | Result |
 | --- | --- |
-| Drag the character | Move the desktop window; the new position is remembered |
+| Drag the character | Move the desktop window (on macOS also above the menu bar); the new position is remembered |
 | Hover or focus the character | Reveal the idle bubble |
 | Right-click or open the hover menu | Mute notifications (chime and OS alerts) or open DSH |
 | Click an alert bubble or native notification | Open the owning Host's GUI |
@@ -104,7 +104,7 @@ node --check client.js
 node --check src/main.cjs
 ```
 
-The test suite covers event mapping, privacy boundaries, permissions, helper lifecycle, settings transport/localization and actions, native-drag contracts, renderer startup, delivery acknowledgements, persistent auto-start and position, alert persistence, balance evaluation/watching, plugin metadata, and the agent tool schema.
+The test suite covers event mapping, privacy boundaries, permissions, helper lifecycle, settings transport/localization and actions, native-drag contracts, above-menu-bar placement and drag-end reachability, renderer startup, delivery acknowledgements, persistent auto-start and position, alert persistence, balance evaluation/watching, plugin metadata, and the agent tool schema.
 
 Automated checks cover exact supplied artwork bytes, manifest provenance, clean asset inventory, active renderer paths, compact bubbles, thinking persistence, and the plugin icon metadata. The supplied artwork has been checked visually on macOS; a Windows/Linux visual pass remains outstanding. No GitHub Actions workflows are configured.
 
@@ -150,6 +150,7 @@ These are developer compatibility utilities, not the normal DSH installation pat
 ## Known limitations
 
 - No session-specific notification deep links or click-through transparent margins.
+- The pet window is not click-through: on macOS, when the pet overlaps the menu bar, clicks inside its 260×270 pt rectangle go to the pet instead of the menu bar. Park it slightly lower if you need that part of the bar.
 - The OS-native notification is best-effort. On macOS, a development build of Electron may not register as a notification sender, so the system banner can be missing; the in-window alert and chime remain the reliable channels.
 - The pet's right-click / ··· menu is the OS-native menu, not an in-window DSH-styled menu.
 - Balance comes from DSH's DeepSeek account session. If that session expires, sign in again under **Settings → Account**; the Desktop Pet tab shows “Sign in to DeepSeek” when it can tell the account is signed out.

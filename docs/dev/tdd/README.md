@@ -9,6 +9,7 @@ latest revision note records every approved change.
 | --- | --- |
 | `increment1-baseline.json` | persistent enabled state, position memory, alert persistence, mid-turn resume |
 | `increment2-baseline.json` | balance warning, settings actions, tool schema, plugin metadata (latest revision) |
+| `increment3-baseline.json` | pet may live above the macOS menu bar: enableLargerThanScreen, `'status'` window level, full-bounds saved-position validation, drag-end reachability clamp (RED frozen contract; implementation pending) |
 
 The verbose RED command output from development is not retained in the tree; it remains in
 the repository history. Run `npm test` to reproduce the current contract.

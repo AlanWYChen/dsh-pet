@@ -48,6 +48,18 @@ APIs in shared logic; OS-specific calls must be guarded.
 4. A saved position that is off every connected display (monitor removed, resolution changed)
    is discarded and the default bottom-right placement is used.
 5. Position writes are debounced or idempotent; a drag must not corrupt the config.
+6. On macOS the pet may live above the menu bar: the frameless window is created with
+   `enableLargerThanScreen` and raised to the `status` window level, so it is not clamped to the
+   work area and is drawn above the menu bar. Alert raising must keep that level (a bare
+   `setAlwaysOnTop(true)` would drop it back behind the bar as `floating`).
+7. Saved-position validation measures visibility against a display's full `bounds` (the
+   menu-bar strip counts as visible); a display object that exposes no `bounds` falls back to
+   its `workArea`. A position off every display is still discarded.
+8. After a drag ends, if fewer than `VISIBLE_MARGIN` (48 pt) of the window's width or height
+   remain inside any connected display's full bounds, the window moves by the minimum amount
+   needed to leave 48 pt visible on each axis, and the corrected position is what is reported
+   and persisted. Exactly 48 pt is allowed, and this guard runs in managed and standalone modes
+   so a drag can never lose the pet.
 
 ## R3. Notifications that cannot be missed
 
@@ -124,10 +136,12 @@ low-balance behavior, the native-notification limitation per OS, and that balanc
   the saved state is not enabled. **When `configFile` is omitted, `ManagedPet` performs no disk
   I/O and keeps today's in-memory behavior**, so the existing protected tests stay valid.
 - The host passes a saved position to the helper through the `DSH_PET_POSITION` environment
-  variable as JSON `{ "x": number, "y": number }`. The helper validates it against
-  `screen.getAllDisplays()` and falls back to bottom-right.
+  variable as JSON `{ "x": number, "y": number }`. The helper validates it against each
+  display's `bounds` (falling back to `workArea` when a display exposes none) and falls back to
+  bottom-right.
 - The helper reports a finished drag to the host as a `pet:position` IPC message carrying
-  `{ x, y }`; `ManagedPet` persists it.
+  `{ x, y }`; `ManagedPet` persists it. The debounced drag-end handler applies the reachability
+  guard against full display bounds first, so the reported position is always reachable.
 - `pet.js` plays one chime for each newly rendered alert mood when sound is enabled; tests may
   stub `AudioContext`/`window.AudioContext`. Contract: every `pet:event` payload published by
   main carries `sound: boolean` (the effective setting, default true). `pet.js` chimes only
